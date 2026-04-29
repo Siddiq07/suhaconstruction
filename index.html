@@ -3,355 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUHA Constructions | Site & Vendor Management</title>
+    <title>SUHA Constructions | Complete Management System</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Inter',sans-serif;background:#f5f8fc;color:#1e2a3e}
+        #loginScreen{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#0b2b3b,#1e5f7a);z-index:9999;display:flex;justify-content:center;align-items:center}
+        .login-box{background:white;padding:35px;border-radius:20px;text-align:center;width:90%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+        .login-logo{background:#f59e0b;width:60px;height:60px;border-radius:15px;display:flex;align-items:center;justify-content:center;color:white;font-size:28px;font-weight:800;margin:0 auto 18px}
+        .login-box h2{color:#1e5f7a;font-size:1.2rem;margin-bottom:4px}.login-sub{color:#6183a0;font-size:.75rem;margin-bottom:20px}
+        .login-box input{width:100%;padding:11px 14px;border-radius:10px;border:2px solid #e2e8f0;font-size:.85rem;margin-bottom:8px;font-family:'Inter',sans-serif}
+        .login-box input:focus{outline:none;border-color:#1e5f7a}
+        .login-btn{width:100%;padding:11px;background:#1e5f7a;color:white;border:none;border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-top:5px}.login-btn:hover{background:#164a60}
+        .login-error{color:#dc2626;font-size:.7rem;margin-top:8px;display:none}
         .nav{background:linear-gradient(135deg,#0b2b3b,#1e5f7a);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:100}
-        .logo-area{display:flex;align-items:center;gap:12px}
+        .logo{display:flex;align-items:center;gap:12px}
         .logo-icon{background:#f59e0b;width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;font-weight:800}
         .logo-text h1{font-size:1.1rem;font-weight:800;color:#fff}.logo-text p{font-size:.65rem;color:#b8d4e3}
-        .nav-links{display:flex;gap:5px;background:rgba(255,255,255,.1);padding:5px;border-radius:50px}
-        .nav-link{padding:8px 20px;border-radius:40px;font-weight:600;font-size:.85rem;cursor:pointer;color:#e2e8f0;display:flex;align-items:center;gap:8px;transition:.3s}
-        .nav-link:hover{background:rgba(255,255,255,.2)}.nav-link.active{background:#fff;color:#1e5f7a}
-        .status{display:flex;align-items:center;gap:6px;font-size:.7rem;padding:5px 12px;border-radius:20px;color:#fff;background:rgba(34,197,94,.2)}.status b{color:#22c55e}
-        .email-tag{color:#f59e0b;background:rgba(255,255,255,.15);padding:8px 18px;border-radius:40px;font-size:.75rem;display:flex;align-items:center;gap:6px}
-        .main{padding:20px;max-width:1200px;margin:0 auto}
+        .nav-links{display:flex;gap:5px;background:rgba(255,255,255,.1);padding:5px;border-radius:50px;flex-wrap:wrap}
+        .nav-link{padding:8px 16px;border-radius:40px;font-weight:600;font-size:.8rem;cursor:pointer;color:#e2e8f0;display:flex;align-items:center;gap:6px;transition:.3s;white-space:nowrap}
+        .nav-link:hover{background:rgba(255,255,255,.2);color:#fff}.nav-link.active{background:#fff;color:#1e5f7a}
+        .main{padding:20px;max-width:1400px;margin:0 auto}
         .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px}
-        .card{background:#fff;border-radius:16px;padding:18px;border:1px solid #e9edf2}.card:hover{transform:translateY(-2px);transition:.3s}
+        .card{background:#fff;border-radius:16px;padding:18px;border:1px solid #e9edf2;cursor:pointer;transition:.3s}.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.08)}
         .card-title{font-size:.65rem;font-weight:600;text-transform:uppercase;color:#6183a0;margin-bottom:6px}
         .card-value{font-size:1.6rem;font-weight:800;color:#1e5f7a}
-        .btn{background:#1e5f7a;border:none;padding:8px 20px;border-radius:25px;color:#fff;font-weight:600;cursor:pointer;font-size:.8rem;display:inline-flex;align-items:center;gap:6px;transition:.3s}.btn:hover{background:#f59e0b}
-        .btn-green{background:#16a34a}.btn-red{background:#dc2626}.btn-outline{background:transparent;border:2px solid #1e5f7a;color:#1e5f7a}.btn-outline:hover{background:#1e5f7a;color:#fff}
+        .btn{background:#1e5f7a;border:none;padding:8px 18px;border-radius:25px;color:#fff;font-weight:600;cursor:pointer;font-size:.78rem;display:inline-flex;align-items:center;gap:6px;transition:.3s}.btn:hover{background:#f59e0b}
+        .btn-sm{padding:5px 12px;font-size:.7rem}.btn-green{background:#16a34a}.btn-red{background:#dc2626}.btn-orange{background:#f59e0b;color:#000}
+        .btn-outline{background:transparent;border:2px solid #1e5f7a;color:#1e5f7a}.btn-outline:hover{background:#1e5f7a;color:#fff}
         .flex-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px}
-        .sites-list{display:flex;flex-direction:column;gap:12px}
-        .site-item{background:#fff;border-radius:14px;padding:16px;border:1px solid #e2edf2;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:.3s}
-        .site-item:hover{transform:translateY(-2px);border-color:#f59e0b;box-shadow:0 6px 20px rgba(0,0,0,.08)}
-        .site-info h3{font-size:1rem;font-weight:700;color:#1e5f7a;margin-bottom:3px}.site-info p{font-size:.7rem;color:#6183a0}
-        .balance-tag{background:#eef2ff;padding:8px 16px;border-radius:25px;font-weight:700;font-size:.9rem}
-        .detail-card{background:#fff;border-radius:16px;padding:20px;margin-bottom:16px;border:1px solid #e9edf2}
-        .detail-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
-        .bal-box{background:#eef2ff;padding:12px 20px;border-radius:25px;text-align:center}
-        .bal-label{font-size:.6rem;color:#6183a0;text-transform:uppercase;font-weight:600}
-        .bal-val{font-size:1.2rem;font-weight:800}
-        table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;font-size:.75rem}
-        th,td{padding:10px;text-align:left;border-bottom:1px solid #eff3f6}
-        th{background:#f8fafd;font-weight:700;color:#2c4b5c;text-transform:uppercase;font-size:.68rem}
-        tr:hover{background:#f8fafd}
-        .badge{padding:3px 10px;border-radius:20px;font-size:.65rem;font-weight:700;text-transform:uppercase;display:inline-block}
+        .tabs{display:inline-flex;gap:0;background:#fff;border-radius:30px;padding:4px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+        .tab-btn{padding:8px 20px;border-radius:25px;border:none;cursor:pointer;font-weight:600;font-size:.78rem;background:transparent;color:#6183a0;transition:.3s}.tab-btn.active{background:#1e5f7a;color:#fff}
+        .filter-bar{background:#fff;border-radius:14px;padding:10px 14px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:8px;border:1px solid #e9edf2;align-items:center}
+        .filter-bar input,.filter-bar select{padding:7px 12px;border-radius:20px;border:1px solid #cbd5e1;font-size:.75rem;min-width:110px;font-family:'Inter',sans-serif}
+        .item-card{background:#fff;border-radius:14px;padding:16px;border:1px solid #e2edf2;margin-bottom:12px;transition:.3s;cursor:pointer}.item-card:hover{box-shadow:0 4px 15px rgba(0,0,0,.08);border-color:#f59e0b}
+        .item-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+        .item-name{font-size:1rem;font-weight:700;color:#1e5f7a}
+        .item-qty{background:#eef2ff;padding:6px 16px;border-radius:20px;font-weight:700;font-size:.85rem}
+        .badge{padding:3px 10px;border-radius:20px;font-size:.62rem;font-weight:700;text-transform:uppercase;display:inline-block}
         .badge-c{background:#e0f2e9;color:#2b7e3a}.badge-d{background:#fee9e7;color:#dc2626}
-        .action-icons i{cursor:pointer;color:#6c8d9c;margin:0 3px;transition:.2s}.action-icons i:hover{color:#f59e0b}
-        .filter-bar{background:#fff;border-radius:12px;padding:10px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:8px;border:1px solid #e9edf2}
-        .filter-bar input,.filter-bar select{padding:6px 10px;border-radius:18px;border:1px solid #cbd5e1;font-size:.72rem;min-width:100px}
-        .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);justify-content:center;align-items:center;z-index:1000}
-        .modal-box{background:#fff;border-radius:18px;max-width:450px;width:90%;padding:22px;max-height:85vh;overflow-y:auto}
-        .form-group{margin-bottom:12px}.form-group label{font-weight:600;display:block;margin-bottom:4px;font-size:.75rem}
-        input,select,textarea{width:100%;padding:9px;border-radius:10px;border:1px solid #cbd5e1;font-size:.8rem;font-family:'Inter',sans-serif}input:focus,select:focus,textarea:focus{outline:none;border-color:#1e5f7a}
-        textarea{min-height:60px;resize:vertical}
-        .toast{position:fixed;bottom:20px;right:20px;background:#1e2a3e;color:#fff;padding:10px 20px;border-radius:25px;font-size:.8rem;z-index:2000;animation:slideIn .3s}@keyframes slideIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-        @media(max-width:768px){.nav{flex-direction:column}.nav-link span{display:none}.nav-link{padding:8px 14px}}
+        .badge-in{background:#e0f2e9;color:#2b7e3a}.badge-out{background:#fee9e7;color:#dc2626}.badge-transfer{background:#fef3c7;color:#92400e}
+        .loc-chip{display:inline-block;padding:4px 10px;border-radius:15px;font-size:.65rem;font-weight:600;margin:2px;cursor:pointer;border:1px solid #e9edf2;transition:.2s}.loc-chip:hover{background:#eef2ff;border-color:#1e5f7a}
+        .loc-chip.empty{background:#fee9e7;border-color:#dc2626;color:#dc2626}
+        table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;font-size:.75rem}
+        th,td{padding:10px;text-align:left;border-bottom:1px solid #eff3f6}th{background:#f8fafd;font-weight:700;color:#2c4b5c;font-size:.68rem;text-transform:uppercase}
+        .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);justify-content:center;align-items:center;z-index:1000;backdrop-filter:blur(2px)}
+        .modal-box{background:#fff;border-radius:20px;max-width:550px;width:92%;padding:24px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,.3);animation:popIn .3s}
+        @keyframes popIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+        .modal-box h3{font-size:1.1rem;color:#1e5f7a;margin-bottom:16px}
+        .form-group{margin-bottom:14px}.form-group label{font-weight:600;display:block;margin-bottom:4px;font-size:.75rem}
+        input,select,textarea{width:100%;padding:9px 12px;border-radius:10px;border:1px solid #cbd5e1;font-size:.8rem;font-family:'Inter',sans-serif}input:focus,select:focus,textarea:focus{outline:none;border-color:#1e5f7a}
+        textarea{min-height:55px;resize:vertical}
+        .btn-close{position:absolute;top:10px;right:10px;background:none;border:none;font-size:1.1rem;cursor:pointer;color:#6183a0;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center}.btn-close:hover{background:#f0f0f0;color:#dc2626}
+        .toast{position:fixed;bottom:25px;right:25px;background:#1e2a3e;color:#fff;padding:10px 22px;border-radius:30px;font-size:.8rem;z-index:2000;animation:slideIn .3s}@keyframes slideIn{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+        .stock-info{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px;margin-bottom:12px;font-size:.73rem;color:#166534}
+        .stock-info.danger{background:#fef2f2;border-color:#fecaca;color:#dc2626}
+        .detail-header{background:#fff;border-radius:16px;padding:20px;margin-bottom:16px;border:1px solid #e9edf2}
+        .detail-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+        .bal-box{background:#eef2ff;padding:12px 20px;border-radius:25px;text-align:center}.bal-label{font-size:.6rem;color:#6183a0;text-transform:uppercase;font-weight:600}.bal-val{font-size:1.2rem;font-weight:800}
+        .action-icons i{cursor:pointer;color:#6c8d9c;margin:0 3px;font-size:.75rem}.action-icons i:hover{color:#f59e0b}
+        @media(max-width:768px){.nav{flex-direction:column}.nav-link span{display:none}.nav-link{padding:8px 12px}.cards{grid-template-columns:repeat(2,1fr)}}
     </style>
 </head>
 <body>
-    <div class="nav">
-        <div class="logo-area">
-            <div class="logo-icon">S</div>
-            <div class="logo-text"><h1>SUHA Constructions</h1><p>Builders & Developers</p></div>
-        </div>
-        <div class="nav-links">
-            <div class="nav-link active" onclick="showTab('dashboard')"><i class="fas fa-chart-line"></i><span>Dashboard</span></div>
-            <div class="nav-link" onclick="showTab('sites')"><i class="fas fa-building"></i><span>Sites</span></div>
-            <div class="nav-link" onclick="showTab('vendors')"><i class="fas fa-truck"></i><span>Vendors</span></div>
-            <div class="nav-link" onclick="showTab('transactions')"><i class="fas fa-receipt"></i><span>Transactions</span></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px">
-            <div class="status"><span style="color:#22c55e">●</span> <b>LIVE</b></div>
-            <div class="email-tag"><i class="fas fa-envelope"></i>suhadesignbuilders@gmail.com</div>
-        </div>
+<div id="loginScreen">
+    <div class="login-box"><div class="login-logo">S</div><h2>SUHA Constructions</h2><p class="login-sub">🔐 Secure Company Access</p>
+    <input type="email" id="loginEmail" placeholder="Email" value="suhadesignbuilders@gmail.com">
+    <input type="password" id="loginPass" placeholder="Password" onkeypress="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">🔐 Sign In</button><p class="login-error" id="loginError"></p></div>
+</div>
+<div id="mainApp" style="display:none">
+<div class="nav">
+    <div class="logo"><div class="logo-icon">S</div><div class="logo-text"><h1>SUHA Constructions</h1><p>Complete Management System</p></div></div>
+    <div class="nav-links">
+        <div class="nav-link active" data-view="dashboard"><i class="fas fa-chart-line"></i><span>Dashboard</span></div>
+        <div class="nav-link" data-view="sites"><i class="fas fa-building"></i><span>Sites</span></div>
+        <div class="nav-link" data-view="vendors"><i class="fas fa-truck"></i><span>Vendors</span></div>
+        <div class="nav-link" data-view="transactions"><i class="fas fa-receipt"></i><span>Transactions</span></div>
+        <div class="nav-link" data-view="inventory"><i class="fas fa-boxes"></i><span>Inventory</span></div>
     </div>
-    <div class="main" id="content"><div style="text-align:center;padding:60px;color:#6183a0">Loading...</div></div>
+    <div style="display:flex;align-items:center;gap:10px"><span style="color:#22c55e;font-size:.7rem">● LIVE</span><button class="btn btn-sm btn-red" onclick="doLogout()">🚪</button></div>
+</div>
+<div class="main" id="content"><div style="text-align:center;padding:60px;color:#6183a0">Loading...</div></div>
+</div>
 
-    <script>
-        const sb = supabase.createClient('https://nfrhcacqjizdgkimraeq.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mcmhjYWNxaml6ZGdraW1yYWVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNzkyNjIsImV4cCI6MjA5Mjk1NTI2Mn0.RY-Zg6uPz82d7d8kKtH-axioVT39-iQj1l_wbGWPKHI');
-        let projects=[],vendors=[],transactions=[],currentTab='dashboard',selectedSite=null,selectedVendor=null;
-        let filter={startDate:'',endDate:'',projectId:'',vendorId:'',type:'',keyword:''};
+<script>
+const SB_URL='https://nfrhcacqjizdgkimraeq.supabase.co',SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mcmhjYWNxaml6ZGdraW1yYWVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNzkyNjIsImV4cCI6MjA5Mjk1NTI2Mn0.RY-Zg6uPz82d7d8kKtH-axioVT39-iQj1l_wbGWPKHI';
+const sb=supabase.createClient(SB_URL,SB_KEY);
+const sitesList=['Hejamadi Godown','Inzam Site','Palm Heights Site','Lakeside Greens','SUHA Corporate Park','Kannangar Site','Padubidri Warehouse'];
 
-        function fmt(n){return'₹ '+Number(n).toLocaleString('en-IN')}
-        function toast(m){const e=document.createElement('div');e.className='toast';e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),2500)}
+let projects=[],vendors=[],transactions=[],invItems=[],invMoves=[];
+let currentView='dashboard',siteId=null,vendorId=null,selItem=null,selLoc=null;
+let invTab='all',invFilter={keyword:'',location:''};
+let txnFilter={startDate:'',endDate:'',projectId:'',vendorId:'',type:'',keyword:''};
+let nextPid=1,nextVid=1,nextTid=1,nextIid=1,nextMid=1;
 
-        async function loadData(){
-            document.getElementById('content').innerHTML='<div style="text-align:center;padding:60px;color:#6183a0">Loading data...</div>';
-            try{
-                const[p,v,t]=await Promise.all([sb.from('project_balances').select('*').order('name'),sb.from('vendor_balances').select('*').order('name'),sb.from('transactions').select('*').order('date',{ascending:false})]);
-                if(p.error||v.error||t.error){document.getElementById('content').innerHTML='<div style="text-align:center;padding:60px;color:#dc2626">❌ Error loading data. <button class="btn" onclick="loadData()">Retry</button></div>';return}
-                projects=p.data||[];vendors=v.data||[];transactions=t.data||[];showTab('dashboard')
-            }catch(e){document.getElementById('content').innerHTML='<div style="text-align:center;padding:60px;color:#dc2626">❌ Error: '+e.message+'</div>'}
-        }
+function toast(m){const e=document.createElement('div');e.className='toast';e.textContent=m;document.body.appendChild(e);setTimeout(()=>{e.style.opacity='0';e.style.transition='opacity .3s';setTimeout(()=>e.remove(),300)},2000)}
+function fmt(n){return'₹ '+Number(n).toLocaleString('en-IN')}
+function fmtNum(n){return Number(n).toLocaleString('en-IN')}
+function companyHdr(){return`<div style="text-align:center;margin-bottom:20px;padding-bottom:15px;border-bottom:3px solid #1e5f7a"><h1 style="color:#1e5f7a;font-size:22px;font-weight:800">SUHA Constructions</h1><p style="font-size:12px;color:#555">Builders & Developers</p><p style="font-size:11px;color:#666">Head Office: Pandith Complex, Kannangar, Padubidri - 574111</p><p style="font-size:11px;color:#666">Branch: Whitestone Tower, Balmatta Road, Mangalore - 575001</p><p style="font-size:11px;color:#666">📞 +91 97403 04406 | 📧 suhadesignbuilders@gmail.com</p></div>`}
 
-        function showTab(tab){
-            currentTab=tab;selectedSite=null;selectedVendor=null;
-            document.querySelectorAll('.nav-link').forEach((l,i)=>{l.classList.toggle('active',i===['dashboard','sites','vendors','transactions'].indexOf(tab))});
-            if(tab==='dashboard')renderDashboard();else if(tab==='sites')renderSites();else if(tab==='vendors')renderVendors();else if(tab==='transactions')renderTransactions()
-        }
+// AUTH
+async function doLogin(){const e=document.getElementById('loginEmail').value.trim(),p=document.getElementById('loginPass').value,er=document.getElementById('loginError');er.style.display='none';if(!e||!p){er.textContent='Enter email and password';er.style.display='block';return}const{data,error}=await sb.auth.signInWithPassword({email:e,password:p});if(error){er.textContent='❌ '+error.message;er.style.display='block'}else{document.getElementById('loginScreen').style.display='none';document.getElementById('mainApp').style.display='block';await loadData();render()}}
+async function doLogout(){await sb.auth.signOut();document.getElementById('loginScreen').style.display='flex';document.getElementById('mainApp').style.display='none'}
 
-        function modal(editId=null){
-            const e=editId?transactions.find(x=>x.id===editId):null;
-            const d=document.createElement('div');d.className='modal';d.style.display='flex';
-            d.innerHTML=`<div class="modal-box"><h3 style="color:#1e5f7a;margin-bottom:14px">${e?'Edit':'New'} Transaction</h3>
-            <div class="form-group"><label>Date</label><input id="md" type="date" value="${e?e.date:new Date().toISOString().slice(0,10)}"></div>
-            <div class="form-group"><label>Type</label><select id="mt"><option value="credit" ${e?.type==='credit'?'selected':''}>💚 Credit</option><option value="debit" ${e?.type==='debit'?'selected':''}>🔴 Debit</option></select></div>
-            <div class="form-group"><label>Amount (₹)</label><input id="ma" type="number" value="${e?e.amount:''}" min="1" placeholder="Amount"></div>
-            <div class="form-group"><label>Site</label><select id="mp">${projects.map(p=>`<option value="${p.id}" ${(selectedSite===p.id||e?.project_id===p.id)?'selected':''}>${p.name}</option>`).join('')}</select></div>
-            <div class="form-group"><label>Vendor</label><select id="mv"><option value="">None</option>${vendors.map(v=>`<option value="${v.id}" ${(selectedVendor===v.id||e?.vendor_id===v.id)?'selected':''}>${v.name}</option>`).join('')}</select></div>
-            <div class="form-group"><label>Notes</label><textarea id="mn">${e?.notes||''}</textarea></div>
-            <div style="display:flex;gap:10px;margin-top:14px"><button class="btn btn-green" id="ms" style="flex:1">Save</button><button class="btn-outline" id="mc" style="flex:1">Cancel</button></div></div>`;
-            document.body.appendChild(d);
-            d.querySelector('#mc').onclick=()=>d.remove();
-            d.addEventListener('click',ev=>{if(ev.target===d)d.remove()});
-            d.querySelector('#ms').onclick=async()=>{
-                const data={date:d.querySelector('#md').value,type:d.querySelector('#mt').value,amount:parseFloat(d.querySelector('#ma').value),project_id:d.querySelector('#mp').value,vendor_id:d.querySelector('#mv').value||null,notes:d.querySelector('#mn').value};
-                if(!data.date||isNaN(data.amount)||data.amount<=0||!data.project_id){toast('Fill all required fields');return}
-                d.remove();
-                if(e){await sb.from('transactions').update(data).eq('id',e.id);toast('Updated!')}
-                else{await sb.from('transactions').insert([data]);toast('Added!')}
-                loadData()
-            }
-        }
+// LOAD
+async function loadData(){
+    const[p,v,t,i,m]=await Promise.all([sb.from('projects').select('*').order('name'),sb.from('vendors').select('*').order('name'),sb.from('transactions').select('*').order('date',{ascending:false}),sb.from('inventory_items').select('*').order('name'),sb.from('inventory_movements').select('*').order('date',{ascending:false})]);
+    projects=p.data||[];vendors=v.data||[];transactions=t.data||[];invItems=i.data||[];invMoves=m.data||[];
+    // Fallback demo data
+    if(!projects.length){projects=[{id:'p1',name:'Lakeside Greens',location:'Padubidri',start_date:'2025-01-10'},{id:'p2',name:'Palm Heights',location:'Kannangar',start_date:'2025-03-05'},{id:'p3',name:'SUHA Corporate Park',location:'Mangalore',start_date:'2025-08-20'}];}
+    if(!vendors.length){vendors=[{id:'v1',name:'Mahadev Cement Works',phone:'9876543210',service:'Cement Supply'},{id:'v2',name:'Sai Steel Industries',phone:'9988766550',service:'TMT Steel'},{id:'v3',name:'Rockland Earthmovers',phone:'9123456789',service:'Heavy Equipment'}];}
+}
+function getUniqueItems(){return[...new Set(invItems.map(i=>i.name))]}
+function getItemLocs(name){return[...new Set(invItems.filter(i=>i.name===name).map(i=>i.location))]}
+function getStockAt(name,loc){const i=invItems.find(x=>x.name===name&&x.location===loc);return i?i.quantity:0}
+function getTotalStock(name){return invItems.filter(i=>i.name===name).reduce((s,i)=>s+i.quantity,0)}
+function getMovements(name){return invMoves.filter(m=>m.item_name===name).sort((a,b)=>new Date(b.date)-new Date(a.date))}
 
-        async function deleteTxn(id){if(!confirm('Delete this transaction?'))return;await sb.from('transactions').delete().eq('id',id);toast('Deleted!');loadData()}
-        async function addSite(){const n=prompt('Site Name:'),l=prompt('Location:');if(!n||!l)return;await sb.from('projects').insert([{name:n,location:l,start_date:new Date().toISOString().slice(0,10)}]);toast('Site added!');loadData()}
-        async function addVendor(){const n=prompt('Vendor Name:');if(!n)return;await sb.from('vendors').insert([{name:n,phone:prompt('Phone:')||'',service:prompt('Service:')||'',address:prompt('Address:')||''}]);toast('Vendor added!');loadData()}
+function getFilteredTxns(){let f=[...transactions];if(txnFilter.startDate)f=f.filter(t=>t.date>=txnFilter.startDate);if(txnFilter.endDate)f=f.filter(t=>t.date<=txnFilter.endDate);if(txnFilter.projectId)f=f.filter(t=>t.project_id===txnFilter.projectId);if(txnFilter.vendorId)f=f.filter(t=>t.vendor_id===txnFilter.vendorId);if(txnFilter.type)f=f.filter(t=>t.type===txnFilter.type);if(txnFilter.keyword){const k=txnFilter.keyword.toLowerCase();f=f.filter(t=>(t.notes&&t.notes.toLowerCase().includes(k))||(projects.find(p=>p.id===t.project_id)?.name?.toLowerCase().includes(k)))}return f}
+let st;function handleSearch(v,t){clearTimeout(st);st=setTimeout(()=>{if(t==='inv'){invFilter.keyword=v;render()}else{txnFilter.keyword=v;render()}},300)}
 
-        function getFiltered(){
-            let f=[...transactions];
-            if(filter.startDate)f=f.filter(t=>t.date>=filter.startDate);
-            if(filter.endDate)f=f.filter(t=>t.date<=filter.endDate);
-            if(filter.projectId)f=f.filter(t=>t.project_id===filter.projectId);
-            if(filter.vendorId)f=f.filter(t=>t.vendor_id===filter.vendorId);
-            if(filter.type)f=f.filter(t=>t.type===filter.type);
-            if(filter.keyword){const k=filter.keyword.toLowerCase();f=f.filter(t=>(t.notes&&t.notes.toLowerCase().includes(k))||(projects.find(p=>p.id===t.project_id)?.name?.toLowerCase().includes(k))||(t.vendor_id&&vendors.find(v=>v.id===t.vendor_id)?.name?.toLowerCase().includes(k)))}
-            return f
-        }
+function makeSummary(l){return`<div style="background:#f0f4f9;padding:12px 15px;border-radius:8px;margin:10px 0;border-left:4px solid #1e5f7a">${l.map(x=>`<p style="margin:3px 0;font-size:12px"><strong>${x.label}:</strong> ${x.value}</p>`).join('')}</div>`}
+function exportPDF(title,headers,rows,summary,filename){const e=document.createElement('div');e.style.cssText='padding:30px;font-family:Arial;max-width:800px;background:white';let h=companyHdr()+`<h2 style="text-align:center;color:#1e5f7a;font-size:18px">${title}</h2>`;if(summary)h+=summary;h+=`<table style="width:100%;border-collapse:collapse;font-size:11px"><thead><tr style="background:#1e5f7a;color:white">${headers.map(hd=>`<th style="padding:10px 8px">${hd}</th>`).join('')}</tr></thead><tbody>${rows.map((r,i)=>`<tr style="background:${i%2===0?'#fff':'#f8fafd'}">${r.map(c=>`<td style="padding:8px">${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;e.innerHTML=h;html2pdf().from(e).set({margin:.4,filename:filename||'Report.pdf'}).save();toast('📄 PDF!')}
+function exportExcel(title,data,headers,filename){const d=data.map(r=>{const o={};headers.forEach((h,i)=>o[h]=r[i]);return o}),w=XLSX.utils.json_to_sheet(d),b=XLSX.utils.book_new();XLSX.utils.book_append_sheet(b,w,title.substring(0,31));XLSX.writeFile(b,filename||'Report.xlsx');toast('📊 Excel!')}
 
-        function companyHdr(){return'<div style="text-align:center;margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid #1e5f7a"><h2 style="color:#1e5f7a">SUHA Constructions</h2><p style="font-size:10px">Head: Pandith Complex, Kannangar, Padubidri - 574111</p><p style="font-size:10px">Branch: Whitestone Tower, Balmatta Rd, Mangalore - 575001</p><p style="font-size:10px">📞 +91 97403 04406 | suhadesignbuilders@gmail.com</p></div>'}
+// MODALS
+function showModal(title,content,onSave){const ex=document.querySelector('.modal');if(ex)ex.remove();const m=document.createElement('div');m.className='modal';m.style.display='flex';m.innerHTML=`<div class="modal-box"><button class="btn-close" onclick="this.closest('.modal').remove()">✕</button><h3>${title}</h3>${content}<div style="display:flex;gap:10px;margin-top:18px"><button class="btn btn-green" id="mSave" style="flex:1">💾 Save</button><button class="btn" id="mCancel" style="flex:1;background:#6c8d9c" onclick="this.closest('.modal').remove()">Cancel</button></div></div>`;document.body.appendChild(m);m.addEventListener('click',e=>{if(e.target===m)m.remove()});m.querySelector('#mSave').addEventListener('click',()=>{const r=onSave(m);if(r!==false)m.remove()});}
 
-        // ===== PDF & EXCEL EXPORTS =====
-        function exportFilteredPDF(){
-            const filtered = getFiltered();
-            const totalCredit = filtered.filter(t=>t.type==='credit').reduce((a,b)=>a+Number(b.amount),0);
-            const totalDebit = filtered.filter(t=>t.type==='debit').reduce((a,b)=>a+Number(b.amount),0);
-            
-            const element = document.createElement('div');
-            element.style.padding = '20px';
-            element.style.fontFamily = 'Arial, sans-serif';
-            
-            let filterInfo = '';
-            if(filter.startDate || filter.endDate || filter.projectId || filter.vendorId || filter.type){
-                filterInfo = '<p style="text-align:center;font-size:10px;color:#666">Filters Applied: ';
-                if(filter.startDate) filterInfo += 'From: '+filter.startDate+' ';
-                if(filter.endDate) filterInfo += 'To: '+filter.endDate+' ';
-                if(filter.projectId) filterInfo += '| Site: '+(projects.find(p=>p.id===filter.projectId)?.name||'')+' ';
-                if(filter.vendorId) filterInfo += '| Vendor: '+(vendors.find(v=>v.id===filter.vendorId)?.name||'')+' ';
-                if(filter.type) filterInfo += '| Type: '+filter.type;
-                filterInfo += '</p>';
-            }
-            
-            element.innerHTML = companyHdr() + `
-                <h3 style="text-align:center;color:#1e5f7a">Filtered Transactions Report</h3>
-                ${filterInfo}
-                <p style="text-align:center;font-size:10px;color:#888">Generated: ${new Date().toLocaleString('en-IN')}</p>
-                <div style="margin:10px 0;background:#f0f4f9;padding:8px;border-radius:8px;font-size:11px">
-                    <strong>Total Credit:</strong> ${fmt(totalCredit)} &nbsp;|&nbsp; 
-                    <strong>Total Debit:</strong> ${fmt(totalDebit)} &nbsp;|&nbsp; 
-                    <strong>Net Balance:</strong> ${fmt(totalCredit - totalDebit)}
-                </div>
-                <table border="1" cellpadding="6" style="width:100%;border-collapse:collapse;font-size:10px">
-                    <thead>
-                        <tr style="background:#1e5f7a;color:white">
-                            <th>Date</th><th>Type</th><th>Amount (₹)</th><th>Site</th><th>Vendor</th><th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${filtered.map(t => `
-                            <tr>
-                                <td>${t.date}</td>
-                                <td style="text-transform:uppercase">${t.type}</td>
-                                <td style="text-align:right">${Number(t.amount).toLocaleString('en-IN')}</td>
-                                <td>${projects.find(p=>p.id===t.project_id)?.name||'-'}</td>
-                                <td>${t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-'}</td>
-                                <td>${t.notes||''}</td>
-                            </tr>
-                        `).join('')}
-                        <tr style="background:#f8fafd;font-weight:700">
-                            <td colspan="2">Total</td>
-                            <td style="text-align:right">${(totalCredit+totalDebit).toLocaleString('en-IN')}</td>
-                            <td colspan="3"></td>
-                        </tr>
-                    </tbody>
-                </table>`;
-            
-            const filename = filter.startDate || filter.endDate ? 
-                `Transactions_${filter.startDate||'all'}_to_${filter.endDate||'all'}.pdf` :
-                `All_Transactions_${new Date().toISOString().slice(0,10)}.pdf`;
-            
-            html2pdf().from(element).set({margin:0.4, filename:filename}).save();
-            toast('📄 PDF downloaded!');
-        }
+// TRANSACTION MODAL
+function txnModal(editId=null){const e=editId?transactions.find(x=>x.id===editId):null;showModal(e?'Edit Transaction':'New Transaction',`<div class="form-group"><label>Date</label><input id="md" type="date" value="${e?e.date:new Date().toISOString().slice(0,10)}"></div><div class="form-group"><label>Type</label><select id="mt"><option value="credit" ${e?.type==='credit'?'selected':''}>💚 Credit</option><option value="debit" ${e?.type==='debit'?'selected':''}>🔴 Debit</option></select></div><div class="form-group"><label>Amount (₹)</label><input id="ma" type="number" value="${e?e.amount:''}" min="1"></div><div class="form-group"><label>Site</label><select id="mp">${projects.map(p=>`<option value="${p.id}" ${(siteId===p.id||e?.project_id===p.id)?'selected':''}>${p.name}</option>`).join('')}</select></div><div class="form-group"><label>Vendor</label><select id="mv"><option value="">None</option>${vendors.map(v=>`<option value="${v.id}" ${(vendorId===v.id||e?.vendor_id===v.id)?'selected':''}>${v.name}</option>`).join('')}</select></div><div class="form-group"><label>Notes</label><textarea id="mn">${e?.notes||''}</textarea></div>`,async(m)=>{const d={date:m.querySelector('#md').value,type:m.querySelector('#mt').value,amount:parseFloat(m.querySelector('#ma').value),project_id:m.querySelector('#mp').value,vendor_id:m.querySelector('#mv').value||null,notes:m.querySelector('#mn').value};if(!d.date||isNaN(d.amount)||d.amount<=0||!d.project_id){toast('Fill fields');return false}if(e)await sb.from('transactions').update(d).eq('id',e.id);else await sb.from('transactions').insert([d]);await loadData();toast(e?'Updated!':'Added!');render()})}
 
-        function exportFilteredExcel(){
-            const filtered = getFiltered();
-            const data = filtered.map(t => ({ 
-                'Date': t.date,
-                'Type': t.type.toUpperCase(),
-                'Amount (₹)': Number(t.amount),
-                'Site': projects.find(p=>p.id===t.project_id)?.name||'-',
-                'Vendor': t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-',
-                'Notes': t.notes||''
-            }));
-            
-            // Add summary row
-            const totalCredit = filtered.filter(t=>t.type==='credit').reduce((a,b)=>a+Number(b.amount),0);
-            const totalDebit = filtered.filter(t=>t.type==='debit').reduce((a,b)=>a+Number(b.amount),0);
-            data.push({
-                'Date': 'TOTAL',
-                'Type': '',
-                'Amount (₹)': totalCredit + totalDebit,
-                'Site': `Credit: ${totalCredit}`,
-                'Vendor': `Debit: ${totalDebit}`,
-                'Notes': `Balance: ${totalCredit - totalDebit}`
-            });
-            
-            const ws = XLSX.utils.json_to_sheet(data);
-            const wb = XLSX.utils.book_new();
-            const sheetName = filter.type ? `${filter.type}_Transactions` : 'Filtered_Transactions';
-            XLSX.utils.book_append_sheet(wb, ws, sheetName.substring(0,31));
-            
-            const filename = filter.startDate ? 
-                `Transactions_${filter.startDate}_to_${filter.endDate||filter.startDate}.xlsx` :
-                `All_Transactions_${new Date().toISOString().slice(0,10)}.xlsx`;
-            
-            XLSX.writeFile(wb, filename);
-            toast('📊 Excel downloaded!');
-        }
+// INVENTORY MODALS
+function invModal(name=null,action='add'){let t='',c='';if(action==='add'){t='Add New Item';c=`<div class="form-group"><label>Item Name *</label><input id="iname" value="${name||''}"></div><div class="form-group"><label>Quantity *</label><input id="iqty" type="number" min="1" value="1"></div><div class="form-group"><label>Location *</label><select id="iloc">${sitesList.map(s=>`<option>${s}</option>`).join('')}</select></div><div class="form-group"><label>Vendor *</label><select id="ivendor"><option value="">Select</option>${vendors.map(v=>`<option value="${v.name}">${v.name}</option>`).join('')}<option value="Local Supplier">Local Supplier</option><option value="Other">Other</option></select></div><div class="form-group"><label>Unit</label><select id="iunit"><option>Bags</option><option>Tonnes</option><option>Pieces</option><option>Kg</option><option>Units</option></select></div><div class="form-group"><label>Min Stock</label><input id="imin" type="number" min="0" value="10"></div><div class="form-group"><label>Notes</label><textarea id="notes"></textarea></div>`}else if(action==='stock'){t=`Add Stock - ${name}`;c=`<div class="stock-info">📦 ${name}: <b>${fmtNum(getTotalStock(name))}</b> total</div><div class="form-group"><label>Location *</label><select id="aloc">${sitesList.map(s=>`<option>${s}</option>`).join('')}</select></div><div class="form-group"><label>Quantity *</label><input id="aqty" type="number" min="1" value="10"></div><div class="form-group"><label>Vendor *</label><select id="avendor"><option value="">Select</option>${vendors.map(v=>`<option value="${v.name}">${v.name}</option>`).join('')}<option value="Other">Other</option></select></div><div class="form-group"><label>Notes</label><textarea id="notes"></textarea></div>`}else if(action==='use'){t=`Use Stock - ${name}`;const locs=getItemLocs(name);c=`<div class="stock-info">Available: ${locs.map(l=>`<b>${l}</b>: ${getStockAt(name,l)}`).join(' | ')}</div><div class="form-group"><label>From *</label><select id="uloc">${locs.map(l=>`<option>${l}</option>`).join('')}</select></div><div class="form-group"><label>Quantity *</label><input id="uqty" type="number" min="1" value="1"></div><div class="form-group"><label>Used At *</label><select id="usite">${sitesList.map(s=>`<option>${s}</option>`).join('')}</select></div><div class="form-group"><label>Notes</label><textarea id="notes"></textarea></div>`}else{t=`Transfer - ${name}`;const locs=getItemLocs(name);c=`<div class="stock-info">Available: ${locs.map(l=>`<b>${l}</b>: ${getStockAt(name,l)}`).join(' | ')}</div><div class="form-group"><label>From *</label><select id="tfrom">${locs.map(l=>`<option>${l}</option>`).join('')}</select></div><div class="form-group"><label>Quantity *</label><input id="tqty" type="number" min="1" value="1"></div><div class="form-group"><label>To *</label><select id="tto">${sitesList.map(s=>`<option>${s}</option>`).join('')}</select></div><div class="form-group"><label>Notes</label><textarea id="notes"></textarea></div>`}showModal(t,c,async(m)=>{const notes=m.querySelector('#notes')?.value||'';if(action==='add'){const nm=m.querySelector('#iname').value.trim(),q=parseInt(m.querySelector('#iqty').value),l=m.querySelector('#iloc').value,u=m.querySelector('#iunit').value,min=parseInt(m.querySelector('#imin').value),ven=m.querySelector('#ivendor').value;if(!nm||!q||!l||!ven){toast('Fill fields');return false}const ex=invItems.find(i=>i.name===nm&&i.location===l);if(ex)await sb.from('inventory_items').update({quantity:ex.quantity+q,vendor:ven}).eq('id',ex.id);else await sb.from('inventory_items').insert([{name:nm,quantity:q,location:l,unit:u,min_stock:min,vendor:ven}]);await sb.from('inventory_movements').insert([{item_name:nm,type:'add',quantity:q,to_location:l,date:new Date().toISOString().slice(0,10),notes:`Initial: ${notes}`,vendor:ven}]);}else if(action==='stock'){const l=m.querySelector('#aloc').value,q=parseInt(m.querySelector('#aqty').value),ven=m.querySelector('#avendor').value;if(!q||!ven){toast('Fill fields');return false}const ex=invItems.find(i=>i.name===name&&i.location===l);if(ex)await sb.from('inventory_items').update({quantity:ex.quantity+q,vendor:ven}).eq('id',ex.id);else await sb.from('inventory_items').insert([{name,quantity:q,location:l,unit:'Units',min_stock:10,vendor:ven}]);await sb.from('inventory_movements').insert([{item_name:name,type:'add',quantity:q,to_location:l,date:new Date().toISOString().slice(0,10),notes,vendor:ven}]);}else if(action==='use'){const l=m.querySelector('#uloc').value,q=parseInt(m.querySelector('#uqty').value),s=m.querySelector('#usite').value,st=getStockAt(name,l);if(!q||q>st){toast(`Only ${st}`);return false}const ex=invItems.find(i=>i.name===name&&i.location===l);if(ex){const nq=ex.quantity-q;if(nq<=0)await sb.from('inventory_items').delete().eq('id',ex.id);else await sb.from('inventory_items').update({quantity:nq}).eq('id',ex.id)}await sb.from('inventory_movements').insert([{item_name:name,type:'use',quantity:q,from_location:l,to_location:s,date:new Date().toISOString().slice(0,10),notes}]);}else{const f=m.querySelector('#tfrom').value,q=parseInt(m.querySelector('#tqty').value),to=m.querySelector('#tto').value,st=getStockAt(name,f);if(!q||q>st||f===to){toast('Invalid');return false}const fi=invItems.find(i=>i.name===name&&i.location===f);if(fi){const nq=fi.quantity-q;if(nq<=0)await sb.from('inventory_items').delete().eq('id',fi.id);else await sb.from('inventory_items').update({quantity:nq}).eq('id',fi.id)}const ti=invItems.find(i=>i.name===name&&i.location===to);if(ti)await sb.from('inventory_items').update({quantity:ti.quantity+q}).eq('id',ti.id);else await sb.from('inventory_items').insert([{name,quantity:q,location:to,unit:fi?.unit||'Units',min_stock:10,vendor:fi?.vendor||''}]);await sb.from('inventory_movements').insert([{item_name:name,type:'transfer',quantity:q,from_location:f,to_location:to,date:new Date().toISOString().slice(0,10),notes}]);}await loadData();toast('Done!');render()})}
 
-        function exportSitePDF(id){
-            const s=projects.find(p=>p.id===id);if(!s)return;
-            const tx=transactions.filter(t=>t.project_id===id);
-            const cr=Number(s.total_credit)||0,db=Number(s.total_debit)||0;
-            const e=document.createElement('div');e.style.padding='20px';e.style.fontFamily='Arial, sans-serif';
-            e.innerHTML=companyHdr()+`<h3 style="text-align:center;color:#1e5f7a">${s.name} - Statement</h3><p style="text-align:center">${s.location} | ${s.start_date}</p><div style="margin:10px 0;background:#f0f4f9;padding:8px;border-radius:8px;font-size:11px"><strong>Credit:</strong> ${fmt(cr)} | <strong>Debit:</strong> ${fmt(db)} | <strong>Balance:</strong> ${fmt(cr-db)}</div><table border="1" cellpadding="6" style="width:100%;border-collapse:collapse;font-size:10px"><tr style="background:#1e5f7a;color:white"><th>Date</th><th>Type</th><th>Amount</th><th>Vendor</th><th>Notes</th></tr>${tx.map(t=>`<tr><td>${t.date}</td><td style="text-transform:uppercase">${t.type}</td><td style="text-align:right">${Number(t.amount).toLocaleString('en-IN')}</td><td>${t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-'}</td><td>${t.notes||''}</td></tr>`).join('')}</table>`;html2pdf().from(e).set({margin:.5,filename:`${s.name}_Report.pdf`}).save();toast('📄 PDF downloaded!')}
-        
-        function exportSiteExcel(id){
-            const s=projects.find(p=>p.id===id);if(!s)return;
-            const d=transactions.filter(t=>t.project_id===id).map(t=>({Date:t.date,Type:t.type.toUpperCase(),'Amount (₹)':Number(t.amount),Vendor:t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-',Notes:t.notes||''}));
-            const w=XLSX.utils.json_to_sheet(d),b=XLSX.utils.book_new();XLSX.utils.book_append_sheet(b,w,s.name.substring(0,31));XLSX.writeFile(b,`${s.name}.xlsx`);toast('📊 Excel downloaded!')
-        }
+async function delTxn(id){if(!confirm('Delete?'))return;await sb.from('transactions').delete().eq('id',id);await loadData();toast('Deleted!');render()}
+async function delMov(id){if(!confirm('Delete?'))return;await sb.from('inventory_movements').delete().eq('id',id);await loadData();toast('Deleted!');render()}
+async function addProj(){const n=prompt('Site Name:'),l=prompt('Location:');if(!n||!l)return;await sb.from('projects').insert([{name:n,location:l,start_date:new Date().toISOString().slice(0,10)}]);await loadData();toast('Added!');render()}
+async function addVend(){const n=prompt('Vendor Name:'),p=prompt('Phone:')||'',s=prompt('Service:')||'',a=prompt('Address:')||'';if(!n)return;await sb.from('vendors').insert([{name:n,phone:p,service:s,address:a}]);await loadData();toast('Added!');render()}
 
-        function exportVendorPDF(id){
-            const v=vendors.find(x=>x.id===id);if(!v)return;
-            const tx=transactions.filter(t=>t.vendor_id===id);
-            const cr=Number(v.total_credit)||0,db=Number(v.total_debit)||0;
-            const e=document.createElement('div');e.style.padding='20px';e.style.fontFamily='Arial, sans-serif';
-            e.innerHTML=companyHdr()+`<h3 style="text-align:center;color:#1e5f7a">${v.name} - Statement</h3><p style="text-align:center">${v.service||''} | ${v.phone||''}</p><div style="margin:10px 0;background:#f0f4f9;padding:8px;border-radius:8px;font-size:11px"><strong>Credit:</strong> ${fmt(cr)} | <strong>Debit:</strong> ${fmt(db)} | <strong>Balance:</strong> ${fmt(cr-db)}</div><table border="1" cellpadding="6" style="width:100%;border-collapse:collapse;font-size:10px"><tr style="background:#1e5f7a;color:white"><th>Date</th><th>Site</th><th>Type</th><th>Amount</th><th>Notes</th></tr>${tx.map(t=>`<tr><td>${t.date}</td><td>${projects.find(p=>p.id===t.project_id)?.name||'-'}</td><td style="text-transform:uppercase">${t.type}</td><td style="text-align:right">${Number(t.amount).toLocaleString('en-IN')}</td><td>${t.notes||''}</td></tr>`).join('')}</table>`;html2pdf().from(e).set({margin:.5,filename:`${v.name}_Report.pdf`}).save();toast('📄 PDF downloaded!')}
-        
-        function exportVendorExcel(id){
-            const v=vendors.find(x=>x.id===id);if(!v)return;
-            const d=transactions.filter(t=>t.vendor_id===id).map(t=>({Date:t.date,Site:projects.find(p=>p.id===t.project_id)?.name||'-',Type:t.type.toUpperCase(),'Amount (₹)':Number(t.amount),Notes:t.notes||''}));
-            const w=XLSX.utils.json_to_sheet(d),b=XLSX.utils.book_new();XLSX.utils.book_append_sheet(b,w,v.name.substring(0,31));XLSX.writeFile(b,`${v.name}.xlsx`);toast('📊 Excel downloaded!')
-        }
+// EXPORTS
+function exportSitePDF(id){const s=projects.find(p=>p.id===id);if(!s)return;const tx=transactions.filter(t=>t.project_id===id),cr=tx.filter(t=>t.type==='credit').reduce((a,b)=>a+Number(b.amount),0),db=tx.filter(t=>t.type==='debit').reduce((a,b)=>a+Number(b.amount),0);exportPDF(s.name,['Date','Type','Amount','Vendor','Notes'],tx.map(t=>[t.date,t.type.toUpperCase(),Number(t.amount).toLocaleString('en-IN'),t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-',t.notes||'']),makeSummary([{label:'Credit',value:fmt(cr)},{label:'Debit',value:fmt(db)},{label:'Balance',value:fmt(cr-db)}]),`${s.name}.pdf`)}
+function exportVendorPDF(id){const v=vendors.find(x=>x.id===id);if(!v)return;const tx=transactions.filter(t=>t.vendor_id===id),cr=tx.filter(t=>t.type==='credit').reduce((a,b)=>a+Number(b.amount),0),db=tx.filter(t=>t.type==='debit').reduce((a,b)=>a+Number(b.amount),0);exportPDF(v.name,['Date','Site','Type','Amount','Notes'],tx.map(t=>[t.date,projects.find(p=>p.id===t.project_id)?.name||'-',t.type.toUpperCase(),Number(t.amount).toLocaleString('en-IN'),t.notes||'']),makeSummary([{label:'Credit',value:fmt(cr)},{label:'Debit',value:fmt(db)},{label:'Balance',value:fmt(cr-db)}]),`${v.name}.pdf`)}
+function exportTxnPDF(){const f=getFilteredTxns(),cr=f.filter(t=>t.type==='credit').reduce((a,b)=>a+Number(b.amount),0),db=f.filter(t=>t.type==='debit').reduce((a,b)=>a+Number(b.amount),0);exportPDF('Transactions',['Date','Type','Amount','Site','Vendor','Notes'],f.map(t=>[t.date,t.type.toUpperCase(),Number(t.amount).toLocaleString('en-IN'),projects.find(p=>p.id===t.project_id)?.name||'-',t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-',t.notes||'']),makeSummary([{label:'Credit',value:fmt(cr)},{label:'Debit',value:fmt(db)},{label:'Balance',value:fmt(cr-db)}]),'Transactions.pdf')}
 
-        function renderDashboard(){
-            let cr=0,db=0;transactions.forEach(t=>{if(t.type==='credit')cr+=Number(t.amount);else db+=Number(t.amount)});
-            document.getElementById('content').innerHTML=`
-            <h2 style="margin-bottom:16px">📊 Dashboard</h2>
-            <div class="cards">
-                <div class="card"><div class="card-title">Total Sites</div><div class="card-value">${projects.length}</div></div>
-                <div class="card"><div class="card-title">Vendors</div><div class="card-value">${vendors.length}</div></div>
-                <div class="card"><div class="card-title">Transactions</div><div class="card-value">${transactions.length}</div></div>
-                <div class="card"><div class="card-title">Net Balance</div><div class="card-value" style="color:${cr-db>=0?'#16a34a':'#dc2626'}">${fmt(cr-db)}</div></div>
-            </div>
-            <div class="flex-row"><button class="btn btn-green" onclick="modal()">➕ Add Transaction</button></div>
-            <div class="cards">
-                <div class="card"><div class="card-title" style="color:#16a34a">Total Credits</div><div class="card-value" style="color:#16a34a">${fmt(cr)}</div></div>
-                <div class="card"><div class="card-title" style="color:#dc2626">Total Debits</div><div class="card-value" style="color:#dc2626">${fmt(db)}</div></div>
-            </div>`
-        }
+// RENDER
+function render(){if(currentView==='dashboard')renderDashboard();else if(currentView==='sites')siteId?renderSiteDetail():renderSites();else if(currentView==='vendors')vendorId?renderVendorDetail():renderVendors();else if(currentView==='transactions')renderTransactions();else if(currentView==='inventory'){if(selItem)showItemDetail(selItem);else if(selLoc)showLocDetail(selLoc);else renderInventory()}}
 
-        function renderSites(){
-            document.getElementById('content').innerHTML=`
-            <h2 style="margin-bottom:16px">🏗️ Sites</h2>
-            <div class="flex-row"><button class="btn" onclick="addSite()">➕ Add Site</button><button class="btn btn-green" onclick="modal()">➕ Add Transaction</button></div>
-            <div class="sites-list">${projects.length?projects.map(p=>`<div class="site-item" onclick="openSite('${p.id}')"><div class="site-info"><h3>${p.name}</h3><p>📍 ${p.location} | 📅 ${p.start_date}</p></div><div class="balance-tag" style="color:${(p.balance||0)>=0?'#16a34a':'#dc2626'}">${fmt(p.balance||0)}</div></div>`).join(''):'<div style="text-align:center;padding:40px;color:#6183a0">No sites yet</div>'}</div>`
-        }
+function renderDashboard(){let cr=0,db=0;transactions.forEach(t=>{if(t.type==='credit')cr+=Number(t.amount);else db+=Number(t.amount)});document.getElementById('content').innerHTML=`<h2>📊 Dashboard</h2><div class="cards"><div class="card" onclick="currentView='sites';render()"><div class="card-title">🏗️ Sites</div><div class="card-value">${projects.length}</div></div><div class="card" onclick="currentView='vendors';render()"><div class="card-title">🚛 Vendors</div><div class="card-value">${vendors.length}</div></div><div class="card" onclick="currentView='transactions';render()"><div class="card-title">💳 Transactions</div><div class="card-value">${transactions.length}</div></div><div class="card" onclick="currentView='inventory';render()"><div class="card-title">📦 Items</div><div class="card-value">${getUniqueItems().length}</div></div><div class="card"><div class="card-title">💰 Balance</div><div class="card-value" style="color:${cr-db>=0?'#16a34a':'#dc2626'}">${fmt(cr-db)}</div></div></div><div class="flex-row"><button class="btn btn-green" onclick="txnModal()">➕ Transaction</button><button class="btn btn-orange" onclick="invModal()">➕ Add Item</button></div><div class="cards"><div class="card"><div class="card-title" style="color:#16a34a">Credits</div><div class="card-value" style="color:#16a34a">${fmt(cr)}</div></div><div class="card"><div class="card-title" style="color:#dc2626">Debits</div><div class="card-value" style="color:#dc2626">${fmt(db)}</div></div></div>`}
 
-        function openSite(id){
-            selectedSite=id;const s=projects.find(p=>p.id===id);if(!s)return;
-            const tx=transactions.filter(t=>t.project_id===id),cr=Number(s.total_credit)||0,db=Number(s.total_debit)||0,bal=cr-db;
-            document.getElementById('content').innerHTML=`
-            <button class="btn" onclick="showTab('sites')" style="margin-bottom:14px">← Back to Sites</button>
-            <div class="detail-card"><div class="detail-inner"><div><h2 style="color:#1e5f7a">${s.name}</h2><p style="color:#6183a0">📍 ${s.location} | 📅 ${s.start_date}</p></div><div class="bal-box"><div class="bal-label">Balance</div><div class="bal-val" style="color:${bal>=0?'#16a34a':'#dc2626'}">${fmt(bal)}</div></div></div></div>
-            <div class="flex-row"><button class="btn btn-green" onclick="modal()">➕ Add Transaction</button><div style="display:flex;gap:8px"><button class="btn btn-red" onclick="exportSitePDF('${id}')">📄 PDF</button><button class="btn" style="background:#16a34a" onclick="exportSiteExcel('${id}')">📊 Excel</button></div></div>
-            <div class="cards"><div class="card"><div class="card-title" style="color:#16a34a">Credit</div><div class="card-value" style="color:#16a34a;font-size:1.3rem">${fmt(cr)}</div></div><div class="card"><div class="card-title" style="color:#dc2626">Debit</div><div class="card-value" style="color:#dc2626;font-size:1.3rem">${fmt(db)}</div></div></div>
-            ${tx.length?`<div style="overflow-x:auto;background:#fff;border-radius:12px"><table><thead><tr><th>Date</th><th>Type</th><th>Credit</th><th>Debit</th><th>Vendor</th><th>Notes</th><th>Actions</th></tr></thead><tbody>${tx.map(t=>`<tr><td>${t.date}</td><td><span class="badge ${t.type==='credit'?'badge-c':'badge-d'}">${t.type}</span></td><td style="text-align:right">${t.type==='credit'?fmt(t.amount):'-'}</td><td style="text-align:right">${t.type==='debit'?fmt(t.amount):'-'}</td><td>${t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-'}</td><td>${t.notes||'-'}</td><td class="action-icons"><i class="fas fa-edit" onclick="event.stopPropagation();modal('${t.id}')"></i><i class="fas fa-trash-alt" onclick="event.stopPropagation();deleteTxn('${t.id}')"></i></td></tr>`).join('')}<tr style="background:#f8fafd;font-weight:700;border-top:2px solid #1e5f7a"><td colspan="2">Total</td><td style="text-align:right;color:#16a34a">${fmt(cr)}</td><td style="text-align:right;color:#dc2626">${fmt(db)}</td><td colspan="3"></td></tr></tbody></table></div>`:'<p style="text-align:center;padding:40px;color:#6183a0">No transactions yet</p>'}`
-        }
+function renderSites(){document.getElementById('content').innerHTML=`<h2>🏗️ Sites</h2><div class="flex-row"><button class="btn" onclick="addProj()">➕ Add Site</button></div><div style="display:flex;flex-direction:column;gap:12px">${projects.map(p=>{const cr=transactions.filter(t=>t.project_id===p.id&&t.type==='credit').reduce((s,t)=>s+Number(t.amount),0),db=transactions.filter(t=>t.project_id===p.id&&t.type==='debit').reduce((s,t)=>s+Number(t.amount),0);return`<div class="item-card" onclick="siteId='${p.id}';render()"><div class="item-header"><span class="item-name">🏗️ ${p.name}</span><span class="item-qty" style="color:${cr-db>=0?'#16a34a':'#dc2626'}">${fmt(cr-db)}</span></div><div style="font-size:.7rem;color:#6183a0">📍 ${p.location} | 📅 ${p.start_date}</div></div>`}).join('')}</div>`}
 
-        function renderVendors(){
-            document.getElementById('content').innerHTML=`
-            <h2 style="margin-bottom:16px">🚛 Vendors</h2>
-            <div class="flex-row"><button class="btn" onclick="addVendor()">➕ Add Vendor</button><button class="btn btn-green" onclick="modal()">➕ Add Transaction</button></div>
-            <div class="sites-list">${vendors.length?vendors.map(v=>`<div class="site-item" onclick="openVendor('${v.id}')"><div class="site-info"><h3>${v.name}</h3><p>${v.service||'Supplier'} | 📞 ${v.phone||'N/A'}</p></div><div class="balance-tag" style="color:${(v.balance||0)>=0?'#16a34a':'#dc2626'}">${fmt(v.balance||0)}</div></div>`).join(''):'<div style="text-align:center;padding:40px;color:#6183a0">No vendors yet</div>'}</div>`
-        }
+function renderSiteDetail(){const s=projects.find(p=>p.id===siteId);if(!s){siteId=null;render();return}const tx=transactions.filter(t=>t.project_id===siteId),cr=tx.filter(t=>t.type==='credit').reduce((a,b)=>a+Number(b.amount),0),db=tx.filter(t=>t.type==='debit').reduce((a,b)=>a+Number(b.amount),0);document.getElementById('content').innerHTML=`<button class="btn" onclick="siteId=null;render()">← Back</button><div class="detail-header"><div class="detail-inner"><div><h2>🏗️ ${s.name}</h2><p style="color:#6183a0">📍 ${s.location} | 📅 ${s.start_date}</p></div><div class="bal-box"><div class="bal-label">Balance</div><div class="bal-val" style="color:${cr-db>=0?'#16a34a':'#dc2626'}">${fmt(cr-db)}</div></div></div></div><div class="flex-row"><button class="btn btn-green" onclick="txnModal()">➕ Transaction</button><button class="btn btn-red btn-sm" onclick="exportSitePDF('${s.id}')">📄 PDF</button></div><div class="cards"><div class="card"><div class="card-title" style="color:#16a34a">Credit</div><div class="card-value" style="color:#16a34a;font-size:1.3rem">${fmt(cr)}</div></div><div class="card"><div class="card-title" style="color:#dc2626">Debit</div><div class="card-value" style="color:#dc2626;font-size:1.3rem">${fmt(db)}</div></div></div><div style="overflow-x:auto;background:#fff;border-radius:12px"><table><thead><tr><th>Date</th><th>Type</th><th>Credit</th><th>Debit</th><th>Vendor</th><th>Notes</th><th>Actions</th></tr></thead><tbody>${tx.length?tx.map(t=>`<tr><td>${t.date}</td><td><span class="badge ${t.type==='credit'?'badge-c':'badge-d'}">${t.type}</span></td><td style="text-align:right">${t.type==='credit'?fmt(t.amount):'-'}</td><td style="text-align:right">${t.type==='debit'?fmt(t.amount):'-'}</td><td>${t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-'}</td><td>${t.notes||'-'}</td><td class="action-icons"><i class="fas fa-edit" onclick="event.stopPropagation();txnModal('${t.id}')"></i><i class="fas fa-trash-alt" onclick="event.stopPropagation();delTxn('${t.id}')"></i></td></tr>`).join('')+`<tr style="background:#f8fafd;font-weight:700"><td colspan="2">Total</td><td style="text-align:right;color:#16a34a">${fmt(cr)}</td><td style="text-align:right;color:#dc2626">${fmt(db)}</td><td colspan="3"></td></tr>`:'<tr><td colspan="7" style="text-align:center;padding:30px">No transactions</td></tr>'}</tbody></table></div>`}
 
-        function openVendor(id){
-            selectedVendor=id;const v=vendors.find(x=>x.id===id);if(!v)return;
-            const tx=transactions.filter(t=>t.vendor_id===id),cr=Number(v.total_credit)||0,db=Number(v.total_debit)||0,bal=cr-db;
-            document.getElementById('content').innerHTML=`
-            <button class="btn" onclick="showTab('vendors')" style="margin-bottom:14px">← Back to Vendors</button>
-            <div class="detail-card"><div class="detail-inner"><div><h2 style="color:#1e5f7a">${v.name}</h2><p style="color:#6183a0">${v.service||'Supplier'} | 📞 ${v.phone||'N/A'}</p></div><div class="bal-box"><div class="bal-label">Balance</div><div class="bal-val" style="color:${bal>=0?'#16a34a':'#dc2626'}">${fmt(bal)}</div></div></div></div>
-            <div class="flex-row"><button class="btn btn-green" onclick="modal()">➕ Add Transaction</button><div style="display:flex;gap:8px"><button class="btn btn-red" onclick="exportVendorPDF('${id}')">📄 PDF</button><button class="btn" style="background:#16a34a" onclick="exportVendorExcel('${id}')">📊 Excel</button></div></div>
-            <div class="cards"><div class="card"><div class="card-title" style="color:#16a34a">Credit</div><div class="card-value" style="color:#16a34a;font-size:1.3rem">${fmt(cr)}</div></div><div class="card"><div class="card-title" style="color:#dc2626">Debit</div><div class="card-value" style="color:#dc2626;font-size:1.3rem">${fmt(db)}</div></div></div>
-            ${tx.length?`<div style="overflow-x:auto;background:#fff;border-radius:12px"><table><thead><tr><th>Date</th><th>Site</th><th>Type</th><th>Credit</th><th>Debit</th><th>Notes</th><th>Actions</th></tr></thead><tbody>${tx.map(t=>`<tr><td>${t.date}</td><td>${projects.find(p=>p.id===t.project_id)?.name||'-'}</td><td><span class="badge ${t.type==='credit'?'badge-c':'badge-d'}">${t.type}</span></td><td style="text-align:right">${t.type==='credit'?fmt(t.amount):'-'}</td><td style="text-align:right">${t.type==='debit'?fmt(t.amount):'-'}</td><td>${t.notes||'-'}</td><td class="action-icons"><i class="fas fa-edit" onclick="event.stopPropagation();modal('${t.id}')"></i><i class="fas fa-trash-alt" onclick="event.stopPropagation();deleteTxn('${t.id}')"></i></td></tr>`).join('')}<tr style="background:#f8fafd;font-weight:700;border-top:2px solid #1e5f7a"><td colspan="3">Total</td><td style="text-align:right;color:#16a34a">${fmt(cr)}</td><td style="text-align:right;color:#dc2626">${fmt(db)}</td><td colspan="2"></td></tr></tbody></table></div>`:'<p style="text-align:center;padding:40px;color:#6183a0">No transactions yet</p>'}`
-        }
+function renderVendors(){document.getElementById('content').innerHTML=`<h2>🚛 Vendors</h2><div class="flex-row"><button class="btn" onclick="addVend()">➕ Add Vendor</button></div><div style="display:flex;flex-direction:column;gap:12px">${vendors.map(v=>{const cr=transactions.filter(t=>t.vendor_id===v.id&&t.type==='credit').reduce((s,t)=>s+Number(t.amount),0),db=transactions.filter(t=>t.vendor_id===v.id&&t.type==='debit').reduce((s,t)=>s+Number(t.amount),0);return`<div class="item-card" onclick="vendorId='${v.id}';render()"><div class="item-header"><span class="item-name">🚛 ${v.name}</span><span class="item-qty" style="color:${cr-db>=0?'#16a34a':'#dc2626'}">${fmt(cr-db)}</span></div><div style="font-size:.7rem;color:#6183a0">${v.service||'Supplier'} | 📞 ${v.phone}</div></div>`}).join('')}</div>`}
 
-        function renderTransactions(){
-            const f=getFiltered(),cr=f.filter(t=>t.type==='credit').reduce((a,b)=>a+Number(b.amount),0),db=f.filter(t=>t.type==='debit').reduce((a,b)=>a+Number(b.amount),0);
-            document.getElementById('content').innerHTML=`
-            <h2 style="margin-bottom:16px">💳 All Transactions</h2>
-            <div class="filter-bar">
-                <input type="date" id="fs" value="${filter.startDate}" title="From Date">
-                <input type="date" id="fe" value="${filter.endDate}" title="To Date">
-                <select id="fp"><option value="">All Sites</option>${projects.map(p=>`<option value="${p.id}" ${filter.projectId===p.id?'selected':''}>${p.name}</option>`).join('')}</select>
-                <select id="fv"><option value="">All Vendors</option>${vendors.map(v=>`<option value="${v.id}" ${filter.vendorId===v.id?'selected':''}>${v.name}</option>`).join('')}</select>
-                <select id="ft"><option value="" ${!filter.type?'selected':''}>All Types</option><option value="credit" ${filter.type==='credit'?'selected':''}>Credit</option><option value="debit" ${filter.type==='debit'?'selected':''}>Debit</option></select>
-                <input type="text" id="fk" placeholder="🔍 Search" value="${filter.keyword}">
-                <button class="btn" onclick="applyFilter()">Apply</button>
-                <button class="btn-outline" onclick="resetFilter()">Reset</button>
-            </div>
-            <div class="flex-row">
-                <button class="btn btn-green" onclick="modal()">➕ Add Transaction</button>
-                <div style="display:flex;gap:8px">
-                    <button class="btn btn-red" onclick="exportFilteredPDF()">📄 Export PDF</button>
-                    <button class="btn" style="background:#16a34a" onclick="exportFilteredExcel()">📊 Export Excel</button>
-                </div>
-            </div>
-            <div class="cards">
-                <div class="card"><div class="card-title" style="color:#16a34a">Filtered Credits</div><div class="card-value" style="color:#16a34a;font-size:1.3rem">${fmt(cr)}</div></div>
-                <div class="card"><div class="card-title" style="color:#dc2626">Filtered Debits</div><div class="card-value" style="color:#dc2626;font-size:1.3rem">${fmt(db)}</div></div>
-                <div class="card"><div class="card-title">Net (Filtered)</div><div class="card-value" style="color:${cr-db>=0?'#16a34a':'#dc2626'};font-size:1.3rem">${fmt(cr-db)}</div></div>
-                <div class="card"><div class="card-title">Records</div><div class="card-value" style="font-size:1.3rem">${f.length}</div></div>
-            </div>
-            ${f.length?`<div style="overflow-x:auto;background:#fff;border-radius:12px"><table><thead><tr><th>Date</th><th>Type</th><th>Credit</th><th>Debit</th><th>Site</th><th>Vendor</th><th>Notes</th><th>Actions</th></tr></thead><tbody>${f.map(t=>`<tr><td>${t.date}</td><td><span class="badge ${t.type==='credit'?'badge-c':'badge-d'}">${t.type}</span></td><td style="text-align:right">${t.type==='credit'?fmt(t.amount):'-'}</td><td style="text-align:right">${t.type==='debit'?fmt(t.amount):'-'}</td><td>${projects.find(p=>p.id===t.project_id)?.name||'-'}</td><td>${t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-'}</td><td>${t.notes||'-'}</td><td class="action-icons"><i class="fas fa-edit" onclick="event.stopPropagation();modal('${t.id}')"></i><i class="fas fa-trash-alt" onclick="event.stopPropagation();deleteTxn('${t.id}')"></i></td></tr>`).join('')}<tr style="background:#f8fafd;font-weight:700;border-top:2px solid #1e5f7a"><td colspan="2">Total</td><td style="text-align:right;color:#16a34a">${fmt(cr)}</td><td style="text-align:right;color:#dc2626">${fmt(db)}</td><td colspan="4"></td></tr></tbody></table></div>`:'<p style="text-align:center;padding:40px;color:#6183a0">No transactions found</p>'}`
-        }
+function renderVendorDetail(){const v=vendors.find(x=>x.id===vendorId);if(!v){vendorId=null;render();return}const tx=transactions.filter(t=>t.vendor_id===vendorId),cr=tx.filter(t=>t.type==='credit').reduce((a,b)=>a+Number(b.amount),0),db=tx.filter(t=>t.type==='debit').reduce((a,b)=>a+Number(b.amount),0);document.getElementById('content').innerHTML=`<button class="btn" onclick="vendorId=null;render()">← Back</button><div class="detail-header"><div class="detail-inner"><div><h2>🚛 ${v.name}</h2><p style="color:#6183a0">${v.service||'Supplier'} | 📞 ${v.phone} | 📍 ${v.address||''}</p></div><div class="bal-box"><div class="bal-label">Balance</div><div class="bal-val" style="color:${cr-db>=0?'#16a34a':'#dc2626'}">${fmt(cr-db)}</div></div></div></div><div class="flex-row"><button class="btn btn-green" onclick="txnModal()">➕ Transaction</button><button class="btn btn-red btn-sm" onclick="exportVendorPDF('${v.id}')">📄 PDF</button></div><div class="cards"><div class="card"><div class="card-title" style="color:#16a34a">Credit</div><div class="card-value" style="color:#16a34a;font-size:1.3rem">${fmt(cr)}</div></div><div class="card"><div class="card-title" style="color:#dc2626">Debit</div><div class="card-value" style="color:#dc2626;font-size:1.3rem">${fmt(db)}</div></div></div><div style="overflow-x:auto;background:#fff;border-radius:12px"><table><thead><tr><th>Date</th><th>Site</th><th>Type</th><th>Credit</th><th>Debit</th><th>Notes</th><th>Actions</th></tr></thead><tbody>${tx.length?tx.map(t=>`<tr><td>${t.date}</td><td>${projects.find(p=>p.id===t.project_id)?.name||'-'}</td><td><span class="badge ${t.type==='credit'?'badge-c':'badge-d'}">${t.type}</span></td><td style="text-align:right">${t.type==='credit'?fmt(t.amount):'-'}</td><td style="text-align:right">${t.type==='debit'?fmt(t.amount):'-'}</td><td>${t.notes||'-'}</td><td class="action-icons"><i class="fas fa-edit" onclick="event.stopPropagation();txnModal('${t.id}')"></i><i class="fas fa-trash-alt" onclick="event.stopPropagation();delTxn('${t.id}')"></i></td></tr>`).join('')+`<tr style="background:#f8fafd;font-weight:700"><td colspan="3">Total</td><td style="text-align:right;color:#16a34a">${fmt(cr)}</td><td style="text-align:right;color:#dc2626">${fmt(db)}</td><td colspan="2"></td></tr>`:'<tr><td colspan="7" style="text-align:center;padding:30px">No transactions</td></tr>'}</tbody></table></div>`}
 
-        function applyFilter(){filter={startDate:document.getElementById('fs').value,endDate:document.getElementById('fe').value,projectId:document.getElementById('fp').value,vendorId:document.getElementById('fv').value,type:document.getElementById('ft').value,keyword:document.getElementById('fk').value};renderTransactions()}
-        function resetFilter(){filter={startDate:'',endDate:'',projectId:'',vendorId:'',type:'',keyword:''};renderTransactions()}
+function renderTransactions(){const f=getFilteredTxns(),cr=f.filter(t=>t.type==='credit').reduce((a,b)=>a+Number(b.amount),0),db=f.filter(t=>t.type==='debit').reduce((a,b)=>a+Number(b.amount),0);document.getElementById('content').innerHTML=`<h2>💳 Transactions</h2><div class="filter-bar"><input type="date" value="${txnFilter.startDate}" onchange="txnFilter.startDate=this.value;render()"><input type="date" value="${txnFilter.endDate}" onchange="txnFilter.endDate=this.value;render()"><select onchange="txnFilter.projectId=this.value;render()"><option value="">All Sites</option>${projects.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select><select onchange="txnFilter.vendorId=this.value;render()"><option value="">All Vendors</option>${vendors.map(v=>`<option value="${v.id}">${v.name}</option>`).join('')}</select><select onchange="txnFilter.type=this.value;render()"><option value="">All Types</option><option value="credit">Credit</option><option value="debit">Debit</option></select><input type="text" placeholder="🔍 Search" value="${txnFilter.keyword}" oninput="handleSearch(this.value,'txn')"><button class="btn btn-sm" onclick="txnFilter={startDate:'',endDate:'',projectId:'',vendorId:'',type:'',keyword:''};render()">Reset</button></div><div class="flex-row"><button class="btn btn-green" onclick="txnModal()">➕ Add</button><button class="btn btn-red btn-sm" onclick="exportTxnPDF()">📄 PDF</button></div><div class="cards"><div class="card"><div class="card-title" style="color:#16a34a">Credits</div><div class="card-value" style="color:#16a34a;font-size:1.2rem">${fmt(cr)}</div></div><div class="card"><div class="card-title" style="color:#dc2626">Debits</div><div class="card-value" style="color:#dc2626;font-size:1.2rem">${fmt(db)}</div></div></div><div style="overflow-x:auto;background:#fff;border-radius:12px"><table><thead><tr><th>Date</th><th>Type</th><th>Credit</th><th>Debit</th><th>Site</th><th>Vendor</th><th>Notes</th><th>Actions</th></tr></thead><tbody>${f.length?f.map(t=>`<tr><td>${t.date}</td><td><span class="badge ${t.type==='credit'?'badge-c':'badge-d'}">${t.type}</span></td><td style="text-align:right">${t.type==='credit'?fmt(t.amount):'-'}</td><td style="text-align:right">${t.type==='debit'?fmt(t.amount):'-'}</td><td>${projects.find(p=>p.id===t.project_id)?.name||'-'}</td><td>${t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-'}</td><td>${t.notes||'-'}</td><td class="action-icons"><i class="fas fa-edit" onclick="event.stopPropagation();txnModal('${t.id}')"></i><i class="fas fa-trash-alt" onclick="event.stopPropagation();delTxn('${t.id}')"></i></td></tr>`).join('')+`<tr style="background:#f8fafd;font-weight:700"><td colspan="2">Total</td><td style="text-align:right;color:#16a34a">${fmt(cr)}</td><td style="text-align:right;color:#dc2626">${fmt(db)}</td><td colspan="4"></td></tr>`:'<tr><td colspan="8" style="text-align:center;padding:30px">No transactions</td></tr>'}</tbody></table></div>`}
 
-        loadData()
-    </script>
+function renderInventory(){const ui=getUniqueItems();let fl=ui;if(invTab==='low')fl=ui.filter(n=>getTotalStock(n)<=20&&getTotalStock(n)>0);if(invTab==='out')fl=ui.filter(n=>getTotalStock(n)===0);if(invFilter.keyword)fl=fl.filter(n=>n.toLowerCase().includes(invFilter.keyword.toLowerCase()));document.getElementById('content').innerHTML=`<h2>📦 Inventory</h2><div class="flex-row"><div class="tabs"><button class="tab-btn ${invTab==='all'?'active':''}" onclick="invTab='all';render()">All</button><button class="tab-btn ${invTab==='low'?'active':''}" onclick="invTab='low';render()">⚠️ Low</button><button class="tab-btn ${invTab==='out'?'active':''}" onclick="invTab='out';render()">❌ Out</button></div><button class="btn btn-green" onclick="invModal()">➕ Add</button></div><div class="filter-bar"><input type="text" placeholder="🔍 Search" value="${invFilter.keyword}" oninput="handleSearch(this.value,'inv')"><select onchange="invFilter.location=this.value;render()"><option value="">📍 All</option>${sitesList.map(s=>`<option>${s}</option>`).join('')}</select></div><div style="display:flex;flex-direction:column;gap:12px">${fl.length?fl.map(name=>{const t=getTotalStock(name),l=getItemLocs(name);return`<div class="item-card" onclick="showItemDetail('${name}')"><div class="item-header"><span class="item-name">📦 ${name}</span><span class="item-qty" style="color:${t===0?'#dc2626':t<=20?'#f59e0b':'#16a34a'}">${t===0?'OUT':fmtNum(t)}</span></div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px">${l.map(lc=>`<span class="loc-chip ${getStockAt(name,lc)===0?'empty':''}" onclick="event.stopPropagation();showLocDetail('${lc}')">📍 ${lc}: ${fmtNum(getStockAt(name,lc))}</span>`).join('')}</div></div>`}).join(''):'<div style="text-align:center;padding:40px">No items</div>'}</div>`}
+function showItemDetail(name){selItem=name;const l=getItemLocs(name),t=getTotalStock(name),m=getMovements(name);document.getElementById('content').innerHTML=`<button class="btn" onclick="selItem=null;render()">← Back</button><div class="detail-header"><div class="detail-inner"><div><h2>📦 ${name}</h2><p style="color:#6183a0">${l.length} locs | ${m.length} moves</p></div><div class="bal-box"><div class="bal-label">Stock</div><div class="bal-val" style="color:${t===0?'#dc2626':t<=20?'#f59e0b':'#16a34a'}">${t===0?'OUT':fmtNum(t)}</div></div></div></div>${t===0?'<div class="stock-info danger">⚠️ Out of stock</div>':''}<div class="flex-row"><button class="btn btn-sm btn-green" onclick="invModal(\''+name+'\',\'stock\')">➕ Add</button><button class="btn btn-sm btn-red" onclick="invModal(\''+name+'\',\'use\')">➖ Use</button><button class="btn btn-sm btn-orange" onclick="invModal(\''+name+'\',\'transfer\')">🚛 Move</button></div><div class="cards">${l.map(lc=>`<div class="card" onclick="showLocDetail('${lc}')"><div class="card-title">📍 ${lc}</div><div class="card-value" style="font-size:1.2rem">${fmtNum(getStockAt(name,lc))}</div></div>`).join('')}</div><h3>📋 Movements</h3><div style="overflow-x:auto;background:#fff;border-radius:12px"><table><thead><tr><th>Date</th><th>Type</th><th>Qty</th><th>From</th><th>To</th><th>Vendor</th><th>Action</th></tr></thead><tbody>${m.map(x=>`<tr><td>${x.date}</td><td><span class="badge ${x.type==='add'?'badge-in':x.type==='use'?'badge-out':'badge-transfer'}">${x.type}</span></td><td>${x.quantity}</td><td>${x.from_location||'-'}</td><td>${x.to_location||'-'}</td><td>${x.vendor||'-'}</td><td class="action-icons"><i class="fas fa-trash-alt" onclick="event.stopPropagation();delMov('${x.id}')"></i></td></tr>`).join('')}</tbody></table></div>`}
+function showLocDetail(loc){selLoc=loc;const it=invItems.filter(i=>i.location===loc);document.getElementById('content').innerHTML=`<button class="btn" onclick="selLoc=null;render()">← Back</button><div class="detail-header"><h2>📍 ${loc}</h2><p style="color:#6183a0">${it.length} items | ${fmtNum(it.reduce((s,i)=>s+i.quantity,0))} units</p></div><div class="cards">${it.map(i=>`<div class="card" onclick="showItemDetail('${i.name}')"><div class="card-title">📦 ${i.name}</div><div class="card-value" style="font-size:1.2rem">${fmtNum(i.quantity)} ${i.unit}</div></div>`).join('')}</div>`}
+
+// NAV
+document.querySelectorAll('#mainApp .nav-link').forEach(l=>{l.addEventListener('click',()=>{currentView=l.dataset.view;siteId=null;vendorId=null;selItem=null;selLoc=null;document.querySelectorAll('#mainApp .nav-link').forEach(x=>x.classList.remove('active'));l.classList.add('active');render()})});
+
+// INIT
+async function init(){const{data:{session}}=await sb.auth.getSession();if(session){document.getElementById('loginScreen').style.display='none';document.getElementById('mainApp').style.display='block';await loadData();render()}}
+init();
+</script>
 </body>
 </html>
