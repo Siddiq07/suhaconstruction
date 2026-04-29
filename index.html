@@ -138,6 +138,133 @@
             return f
         }
 
+        function companyHdr(){return'<div style="text-align:center;margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid #1e5f7a"><h2 style="color:#1e5f7a">SUHA Constructions</h2><p style="font-size:10px">Head: Pandith Complex, Kannangar, Padubidri - 574111</p><p style="font-size:10px">Branch: Whitestone Tower, Balmatta Rd, Mangalore - 575001</p><p style="font-size:10px">📞 +91 97403 04406 | suhadesignbuilders@gmail.com</p></div>'}
+
+        // ===== PDF & EXCEL EXPORTS =====
+        function exportFilteredPDF(){
+            const filtered = getFiltered();
+            const totalCredit = filtered.filter(t=>t.type==='credit').reduce((a,b)=>a+Number(b.amount),0);
+            const totalDebit = filtered.filter(t=>t.type==='debit').reduce((a,b)=>a+Number(b.amount),0);
+            
+            const element = document.createElement('div');
+            element.style.padding = '20px';
+            element.style.fontFamily = 'Arial, sans-serif';
+            
+            let filterInfo = '';
+            if(filter.startDate || filter.endDate || filter.projectId || filter.vendorId || filter.type){
+                filterInfo = '<p style="text-align:center;font-size:10px;color:#666">Filters Applied: ';
+                if(filter.startDate) filterInfo += 'From: '+filter.startDate+' ';
+                if(filter.endDate) filterInfo += 'To: '+filter.endDate+' ';
+                if(filter.projectId) filterInfo += '| Site: '+(projects.find(p=>p.id===filter.projectId)?.name||'')+' ';
+                if(filter.vendorId) filterInfo += '| Vendor: '+(vendors.find(v=>v.id===filter.vendorId)?.name||'')+' ';
+                if(filter.type) filterInfo += '| Type: '+filter.type;
+                filterInfo += '</p>';
+            }
+            
+            element.innerHTML = companyHdr() + `
+                <h3 style="text-align:center;color:#1e5f7a">Filtered Transactions Report</h3>
+                ${filterInfo}
+                <p style="text-align:center;font-size:10px;color:#888">Generated: ${new Date().toLocaleString('en-IN')}</p>
+                <div style="margin:10px 0;background:#f0f4f9;padding:8px;border-radius:8px;font-size:11px">
+                    <strong>Total Credit:</strong> ${fmt(totalCredit)} &nbsp;|&nbsp; 
+                    <strong>Total Debit:</strong> ${fmt(totalDebit)} &nbsp;|&nbsp; 
+                    <strong>Net Balance:</strong> ${fmt(totalCredit - totalDebit)}
+                </div>
+                <table border="1" cellpadding="6" style="width:100%;border-collapse:collapse;font-size:10px">
+                    <thead>
+                        <tr style="background:#1e5f7a;color:white">
+                            <th>Date</th><th>Type</th><th>Amount (₹)</th><th>Site</th><th>Vendor</th><th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${filtered.map(t => `
+                            <tr>
+                                <td>${t.date}</td>
+                                <td style="text-transform:uppercase">${t.type}</td>
+                                <td style="text-align:right">${Number(t.amount).toLocaleString('en-IN')}</td>
+                                <td>${projects.find(p=>p.id===t.project_id)?.name||'-'}</td>
+                                <td>${t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-'}</td>
+                                <td>${t.notes||''}</td>
+                            </tr>
+                        `).join('')}
+                        <tr style="background:#f8fafd;font-weight:700">
+                            <td colspan="2">Total</td>
+                            <td style="text-align:right">${(totalCredit+totalDebit).toLocaleString('en-IN')}</td>
+                            <td colspan="3"></td>
+                        </tr>
+                    </tbody>
+                </table>`;
+            
+            const filename = filter.startDate || filter.endDate ? 
+                `Transactions_${filter.startDate||'all'}_to_${filter.endDate||'all'}.pdf` :
+                `All_Transactions_${new Date().toISOString().slice(0,10)}.pdf`;
+            
+            html2pdf().from(element).set({margin:0.4, filename:filename}).save();
+            toast('📄 PDF downloaded!');
+        }
+
+        function exportFilteredExcel(){
+            const filtered = getFiltered();
+            const data = filtered.map(t => ({ 
+                'Date': t.date,
+                'Type': t.type.toUpperCase(),
+                'Amount (₹)': Number(t.amount),
+                'Site': projects.find(p=>p.id===t.project_id)?.name||'-',
+                'Vendor': t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-',
+                'Notes': t.notes||''
+            }));
+            
+            // Add summary row
+            const totalCredit = filtered.filter(t=>t.type==='credit').reduce((a,b)=>a+Number(b.amount),0);
+            const totalDebit = filtered.filter(t=>t.type==='debit').reduce((a,b)=>a+Number(b.amount),0);
+            data.push({
+                'Date': 'TOTAL',
+                'Type': '',
+                'Amount (₹)': totalCredit + totalDebit,
+                'Site': `Credit: ${totalCredit}`,
+                'Vendor': `Debit: ${totalDebit}`,
+                'Notes': `Balance: ${totalCredit - totalDebit}`
+            });
+            
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            const sheetName = filter.type ? `${filter.type}_Transactions` : 'Filtered_Transactions';
+            XLSX.utils.book_append_sheet(wb, ws, sheetName.substring(0,31));
+            
+            const filename = filter.startDate ? 
+                `Transactions_${filter.startDate}_to_${filter.endDate||filter.startDate}.xlsx` :
+                `All_Transactions_${new Date().toISOString().slice(0,10)}.xlsx`;
+            
+            XLSX.writeFile(wb, filename);
+            toast('📊 Excel downloaded!');
+        }
+
+        function exportSitePDF(id){
+            const s=projects.find(p=>p.id===id);if(!s)return;
+            const tx=transactions.filter(t=>t.project_id===id);
+            const cr=Number(s.total_credit)||0,db=Number(s.total_debit)||0;
+            const e=document.createElement('div');e.style.padding='20px';e.style.fontFamily='Arial, sans-serif';
+            e.innerHTML=companyHdr()+`<h3 style="text-align:center;color:#1e5f7a">${s.name} - Statement</h3><p style="text-align:center">${s.location} | ${s.start_date}</p><div style="margin:10px 0;background:#f0f4f9;padding:8px;border-radius:8px;font-size:11px"><strong>Credit:</strong> ${fmt(cr)} | <strong>Debit:</strong> ${fmt(db)} | <strong>Balance:</strong> ${fmt(cr-db)}</div><table border="1" cellpadding="6" style="width:100%;border-collapse:collapse;font-size:10px"><tr style="background:#1e5f7a;color:white"><th>Date</th><th>Type</th><th>Amount</th><th>Vendor</th><th>Notes</th></tr>${tx.map(t=>`<tr><td>${t.date}</td><td style="text-transform:uppercase">${t.type}</td><td style="text-align:right">${Number(t.amount).toLocaleString('en-IN')}</td><td>${t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-'}</td><td>${t.notes||''}</td></tr>`).join('')}</table>`;html2pdf().from(e).set({margin:.5,filename:`${s.name}_Report.pdf`}).save();toast('📄 PDF downloaded!')}
+        
+        function exportSiteExcel(id){
+            const s=projects.find(p=>p.id===id);if(!s)return;
+            const d=transactions.filter(t=>t.project_id===id).map(t=>({Date:t.date,Type:t.type.toUpperCase(),'Amount (₹)':Number(t.amount),Vendor:t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-',Notes:t.notes||''}));
+            const w=XLSX.utils.json_to_sheet(d),b=XLSX.utils.book_new();XLSX.utils.book_append_sheet(b,w,s.name.substring(0,31));XLSX.writeFile(b,`${s.name}.xlsx`);toast('📊 Excel downloaded!')
+        }
+
+        function exportVendorPDF(id){
+            const v=vendors.find(x=>x.id===id);if(!v)return;
+            const tx=transactions.filter(t=>t.vendor_id===id);
+            const cr=Number(v.total_credit)||0,db=Number(v.total_debit)||0;
+            const e=document.createElement('div');e.style.padding='20px';e.style.fontFamily='Arial, sans-serif';
+            e.innerHTML=companyHdr()+`<h3 style="text-align:center;color:#1e5f7a">${v.name} - Statement</h3><p style="text-align:center">${v.service||''} | ${v.phone||''}</p><div style="margin:10px 0;background:#f0f4f9;padding:8px;border-radius:8px;font-size:11px"><strong>Credit:</strong> ${fmt(cr)} | <strong>Debit:</strong> ${fmt(db)} | <strong>Balance:</strong> ${fmt(cr-db)}</div><table border="1" cellpadding="6" style="width:100%;border-collapse:collapse;font-size:10px"><tr style="background:#1e5f7a;color:white"><th>Date</th><th>Site</th><th>Type</th><th>Amount</th><th>Notes</th></tr>${tx.map(t=>`<tr><td>${t.date}</td><td>${projects.find(p=>p.id===t.project_id)?.name||'-'}</td><td style="text-transform:uppercase">${t.type}</td><td style="text-align:right">${Number(t.amount).toLocaleString('en-IN')}</td><td>${t.notes||''}</td></tr>`).join('')}</table>`;html2pdf().from(e).set({margin:.5,filename:`${v.name}_Report.pdf`}).save();toast('📄 PDF downloaded!')}
+        
+        function exportVendorExcel(id){
+            const v=vendors.find(x=>x.id===id);if(!v)return;
+            const d=transactions.filter(t=>t.vendor_id===id).map(t=>({Date:t.date,Site:projects.find(p=>p.id===t.project_id)?.name||'-',Type:t.type.toUpperCase(),'Amount (₹)':Number(t.amount),Notes:t.notes||''}));
+            const w=XLSX.utils.json_to_sheet(d),b=XLSX.utils.book_new();XLSX.utils.book_append_sheet(b,w,v.name.substring(0,31));XLSX.writeFile(b,`${v.name}.xlsx`);toast('📊 Excel downloaded!')
+        }
+
         function renderDashboard(){
             let cr=0,db=0;transactions.forEach(t=>{if(t.type==='credit')cr+=Number(t.amount);else db+=Number(t.amount)});
             document.getElementById('content').innerHTML=`
@@ -195,19 +322,34 @@
             const f=getFiltered(),cr=f.filter(t=>t.type==='credit').reduce((a,b)=>a+Number(b.amount),0),db=f.filter(t=>t.type==='debit').reduce((a,b)=>a+Number(b.amount),0);
             document.getElementById('content').innerHTML=`
             <h2 style="margin-bottom:16px">💳 All Transactions</h2>
-            <div class="filter-bar"><input type="date" id="fs" value="${filter.startDate}" title="From"><input type="date" id="fe" value="${filter.endDate}" title="To"><select id="fp"><option value="">All Sites</option>${projects.map(p=>`<option value="${p.id}" ${filter.projectId===p.id?'selected':''}>${p.name}</option>`).join('')}</select><select id="fv"><option value="">All Vendors</option>${vendors.map(v=>`<option value="${v.id}" ${filter.vendorId===v.id?'selected':''}>${v.name}</option>`).join('')}</select><select id="ft"><option value="" ${!filter.type?'selected':''}>All</option><option value="credit" ${filter.type==='credit'?'selected':''}>Credit</option><option value="debit" ${filter.type==='debit'?'selected':''}>Debit</option></select><input type="text" id="fk" placeholder="Search" value="${filter.keyword}"><button class="btn" onclick="applyFilter()">Apply</button><button class="btn-outline" onclick="resetFilter()">Reset</button></div>
-            <div class="flex-row"><button class="btn btn-green" onclick="modal()">➕ Add Transaction</button></div>
+            <div class="filter-bar">
+                <input type="date" id="fs" value="${filter.startDate}" title="From Date">
+                <input type="date" id="fe" value="${filter.endDate}" title="To Date">
+                <select id="fp"><option value="">All Sites</option>${projects.map(p=>`<option value="${p.id}" ${filter.projectId===p.id?'selected':''}>${p.name}</option>`).join('')}</select>
+                <select id="fv"><option value="">All Vendors</option>${vendors.map(v=>`<option value="${v.id}" ${filter.vendorId===v.id?'selected':''}>${v.name}</option>`).join('')}</select>
+                <select id="ft"><option value="" ${!filter.type?'selected':''}>All Types</option><option value="credit" ${filter.type==='credit'?'selected':''}>Credit</option><option value="debit" ${filter.type==='debit'?'selected':''}>Debit</option></select>
+                <input type="text" id="fk" placeholder="🔍 Search" value="${filter.keyword}">
+                <button class="btn" onclick="applyFilter()">Apply</button>
+                <button class="btn-outline" onclick="resetFilter()">Reset</button>
+            </div>
+            <div class="flex-row">
+                <button class="btn btn-green" onclick="modal()">➕ Add Transaction</button>
+                <div style="display:flex;gap:8px">
+                    <button class="btn btn-red" onclick="exportFilteredPDF()">📄 Export PDF</button>
+                    <button class="btn" style="background:#16a34a" onclick="exportFilteredExcel()">📊 Export Excel</button>
+                </div>
+            </div>
+            <div class="cards">
+                <div class="card"><div class="card-title" style="color:#16a34a">Filtered Credits</div><div class="card-value" style="color:#16a34a;font-size:1.3rem">${fmt(cr)}</div></div>
+                <div class="card"><div class="card-title" style="color:#dc2626">Filtered Debits</div><div class="card-value" style="color:#dc2626;font-size:1.3rem">${fmt(db)}</div></div>
+                <div class="card"><div class="card-title">Net (Filtered)</div><div class="card-value" style="color:${cr-db>=0?'#16a34a':'#dc2626'};font-size:1.3rem">${fmt(cr-db)}</div></div>
+                <div class="card"><div class="card-title">Records</div><div class="card-value" style="font-size:1.3rem">${f.length}</div></div>
+            </div>
             ${f.length?`<div style="overflow-x:auto;background:#fff;border-radius:12px"><table><thead><tr><th>Date</th><th>Type</th><th>Credit</th><th>Debit</th><th>Site</th><th>Vendor</th><th>Notes</th><th>Actions</th></tr></thead><tbody>${f.map(t=>`<tr><td>${t.date}</td><td><span class="badge ${t.type==='credit'?'badge-c':'badge-d'}">${t.type}</span></td><td style="text-align:right">${t.type==='credit'?fmt(t.amount):'-'}</td><td style="text-align:right">${t.type==='debit'?fmt(t.amount):'-'}</td><td>${projects.find(p=>p.id===t.project_id)?.name||'-'}</td><td>${t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-'}</td><td>${t.notes||'-'}</td><td class="action-icons"><i class="fas fa-edit" onclick="event.stopPropagation();modal('${t.id}')"></i><i class="fas fa-trash-alt" onclick="event.stopPropagation();deleteTxn('${t.id}')"></i></td></tr>`).join('')}<tr style="background:#f8fafd;font-weight:700;border-top:2px solid #1e5f7a"><td colspan="2">Total</td><td style="text-align:right;color:#16a34a">${fmt(cr)}</td><td style="text-align:right;color:#dc2626">${fmt(db)}</td><td colspan="4"></td></tr></tbody></table></div>`:'<p style="text-align:center;padding:40px;color:#6183a0">No transactions found</p>'}`
         }
 
         function applyFilter(){filter={startDate:document.getElementById('fs').value,endDate:document.getElementById('fe').value,projectId:document.getElementById('fp').value,vendorId:document.getElementById('fv').value,type:document.getElementById('ft').value,keyword:document.getElementById('fk').value};renderTransactions()}
         function resetFilter(){filter={startDate:'',endDate:'',projectId:'',vendorId:'',type:'',keyword:''};renderTransactions()}
-
-        function companyHdr(){return'<div style="text-align:center;margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid #1e5f7a"><h2 style="color:#1e5f7a">SUHA Constructions</h2><p style="font-size:10px">Head: Pandith Complex, Kannangar, Padubidri - 574111</p><p style="font-size:10px">Branch: Whitestone Tower, Balmatta Rd, Mangalore - 575001</p><p style="font-size:10px">📞 +91 97403 04406 | suhadesignbuilders@gmail.com</p></div>'}
-        function exportSitePDF(id){const s=projects.find(p=>p.id===id);if(!s)return;const tx=transactions.filter(t=>t.project_id===id);const e=document.createElement('div');e.style.padding='20px';e.innerHTML=companyHdr()+`<h3 style="text-align:center">${s.name} - Statement</h3><p style="text-align:center">${s.location} | ${s.start_date}</p><table border="1" cellpadding="8" style="width:100%;border-collapse:collapse;font-size:11px"><tr style="background:#1e5f7a;color:white"><th>Date</th><th>Type</th><th>Amount</th><th>Vendor</th><th>Notes</th></tr>${tx.map(t=>`<tr><td>${t.date}</td><td>${t.type}</td><td style="text-align:right">${fmt(t.amount)}</td><td>${t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-'}</td><td>${t.notes||''}</td></tr>`).join('')}</table>`;html2pdf().from(e).set({margin:.5,filename:`${s.name}_Report.pdf`}).save()}
-        function exportSiteExcel(id){const s=projects.find(p=>p.id===id);if(!s)return;const d=transactions.filter(t=>t.project_id===id).map(t=>({Date:t.date,Type:t.type,Amount:Number(t.amount),Vendor:t.vendor_id?vendors.find(v=>v.id===t.vendor_id)?.name:'-',Notes:t.notes}));const w=XLSX.utils.json_to_sheet(d),b=XLSX.utils.book_new();XLSX.utils.book_append_sheet(b,w,s.name.substring(0,31));XLSX.writeFile(b,`${s.name}.xlsx`)}
-        function exportVendorPDF(id){const v=vendors.find(x=>x.id===id);if(!v)return;const tx=transactions.filter(t=>t.vendor_id===id);const e=document.createElement('div');e.style.padding='20px';e.innerHTML=companyHdr()+`<h3 style="text-align:center">${v.name} - Statement</h3><p style="text-align:center">${v.service||''} | ${v.phone||''}</p><table border="1" cellpadding="8" style="width:100%;border-collapse:collapse;font-size:11px"><tr style="background:#1e5f7a;color:white"><th>Date</th><th>Site</th><th>Type</th><th>Amount</th><th>Notes</th></tr>${tx.map(t=>`<tr><td>${t.date}</td><td>${projects.find(p=>p.id===t.project_id)?.name||'-'}</td><td>${t.type}</td><td style="text-align:right">${fmt(t.amount)}</td><td>${t.notes||''}</td></tr>`).join('')}</table>`;html2pdf().from(e).set({margin:.5,filename:`${v.name}_Report.pdf`}).save()}
-        function exportVendorExcel(id){const v=vendors.find(x=>x.id===id);if(!v)return;const d=transactions.filter(t=>t.vendor_id===id).map(t=>({Date:t.date,Site:projects.find(p=>p.id===t.project_id)?.name||'-',Type:t.type,Amount:Number(t.amount),Notes:t.notes}));const w=XLSX.utils.json_to_sheet(d),b=XLSX.utils.book_new();XLSX.utils.book_append_sheet(b,w,v.name.substring(0,31));XLSX.writeFile(b,`${v.name}.xlsx`)}
 
         loadData()
     </script>
