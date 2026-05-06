@@ -12,7 +12,6 @@
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Inter',sans-serif;background:#f0f4f8;color:#1a2a3a;min-height:100vh}
-        
         .nav{background:linear-gradient(135deg,#0b2b3b,#1e5f7a);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.1)}
         .logo{display:flex;align-items:center;gap:14px}
         .logo-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.15)}
@@ -23,14 +22,12 @@
         .nav-btn{color:#fff;text-decoration:none;padding:8px 16px;border-radius:10px;font-size:.78rem;font-weight:600;transition:.3s;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.15)}
         .nav-btn:hover{background:rgba(255,255,255,.25)}
         .nav-btn.website{background:#f59e0b;color:#1a2a3a}.nav-btn.website:hover{background:#e5900a}
-        
         .main{padding:24px;max-width:1400px;margin:0 auto}
         .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
         .card{background:#fff;border-radius:16px;padding:20px;border:1px solid #e8edf2;cursor:pointer;transition:.3s;box-shadow:0 1px 3px rgba(0,0,0,.04)}
         .card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,.1);border-color:#1e5f7a}
         .card-title{font-size:.7rem;font-weight:600;text-transform:uppercase;color:#64748b;margin-bottom:8px;letter-spacing:.5px}
         .card-value{font-size:1.8rem;font-weight:800;color:#1e5f7a;line-height:1.2}
-        
         .btn{background:#1e5f7a;border:none;padding:9px 20px;border-radius:12px;color:#fff;font-weight:600;cursor:pointer;font-size:.82rem;display:inline-flex;align-items:center;gap:7px;transition:.3s;font-family:'Inter',sans-serif;text-decoration:none}
         .btn:hover{background:#174b63;transform:translateY(-1px);box-shadow:0 4px 12px rgba(30,95,122,.3)}
         .btn-sm{padding:6px 14px;font-size:.75rem;border-radius:10px}
@@ -39,59 +36,45 @@
         .btn-orange{background:#f59e0b;color:#1a2a3a}.btn-orange:hover{background:#d97706}
         .btn-purple{background:#7c3aed}.btn-purple:hover{background:#6d28d9}
         .btn-indigo{background:#4f46e5}.btn-indigo:hover{background:#4338ca}
-        
         .flex-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px}
-        
         .tabs{display:inline-flex;gap:4px;background:#fff;border-radius:14px;padding:5px;box-shadow:0 2px 8px rgba(0,0,0,.06);flex-wrap:wrap}
         .tab-btn{padding:8px 16px;border-radius:12px;border:none;cursor:pointer;font-weight:600;font-size:.75rem;background:transparent;color:#64748b;transition:.3s;font-family:'Inter',sans-serif;white-space:nowrap}
         .tab-btn:hover{background:rgba(30,95,122,.08);color:#1e5f7a}
         .tab-btn.active{background:#1e5f7a;color:#fff;box-shadow:0 2px 8px rgba(30,95,122,.3)}
-        
         table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;font-size:.78rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
         th,td{padding:12px 14px;text-align:left;border-bottom:1px solid #f1f5f9}
         th{background:#f8fafc;font-weight:700;color:#334155;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px}
         tr:hover{background:#f8fafc}
-        
         .badge{padding:4px 12px;border-radius:20px;font-size:.68rem;font-weight:700;text-transform:uppercase;display:inline-block;letter-spacing:.3px}
         .badge-admin{background:#fef3c7;color:#92400e}.badge-manager{background:#dbeafe;color:#1e40af}.badge-staff{background:#dcfce7;color:#166534}
         .badge-success{background:#dcfce7;color:#166534}.badge-error{background:#fee2e2;color:#991b1b}.badge-warning{background:#fef3c7;color:#92400e}
         .badge-active{background:#dcfce7;color:#166534}.badge-locked{background:#f1f5f9;color:#64748b}
-        
         .admin-card{background:#fff;border-radius:16px;padding:20px;border:1px solid #e8edf2;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
         .admin-card h3{font-size:.9rem;color:#1e5f7a;margin-bottom:12px;font-weight:700}
-        
         .setting-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #f1f5f9}
         .setting-row:last-child{border-bottom:none}
-        
-        .form-group{margin-bottom:14px}.form-group label{font-weight:600;display:block;margin-bottom:4px;font-size:.78rem;color:#334155}
+        .form-group{margin-bottom:14px}.form-group label{font-weight:600;display:block;margin-bottom:4px;font-size:.78rem;color:#334155}.form-group label .req{color:#dc2626}
         input,select,textarea{width:100%;padding:10px 14px;border-radius:10px;border:1px solid #d1d5db;font-size:.85rem;font-family:'Inter',sans-serif;transition:.3s}
         input:focus,select:focus,textarea:focus{outline:none;border-color:#1e5f7a;box-shadow:0 0 0 3px rgba(30,95,122,.1)}
-        
         .toggle-switch{position:relative;width:50px;height:26px;display:inline-block}
         .toggle-switch input{opacity:0;width:0;height:0}
         .toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:34px}
         .toggle-slider:before{position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;background-color:#fff;transition:.4s;border-radius:50%}
         input:checked+.toggle-slider{background-color:#1e5f7a}
         input:checked+.toggle-slider:before{transform:translateX(24px)}
-        
         .permission-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:8px}
         .perm-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f8fafc;border-radius:8px;font-size:.75rem}
-        
         .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);justify-content:center;align-items:center;z-index:1000;backdrop-filter:blur(4px)}
         .modal-box{background:#fff;border-radius:20px;max-width:500px;width:92%;padding:28px;max-height:85vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.3);position:relative}
         .btn-close{position:absolute;top:12px;right:12px;background:none;border:none;font-size:1.1rem;cursor:pointer;color:#64748b;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.3s}
         .btn-close:hover{background:#fee2e2;color:#dc2626}
-        
         .otp-box{background:#f0fdf4;border:2px solid #16a34a;border-radius:12px;padding:16px;margin:12px 0;text-align:center}
         .otp-code{font-size:1.8rem;font-weight:800;color:#16a34a;letter-spacing:8px}
-        
         .toast{position:fixed;bottom:30px;right:30px;background:#1a2a3a;color:#fff;padding:12px 24px;border-radius:14px;font-size:.85rem;z-index:2000;animation:slideIn .3s ease;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.2)}
         @keyframes slideIn{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
-        
         .danger-zone{border:2px solid #fee2e2;border-radius:14px;padding:16px;background:#fff;margin-top:16px}
         .danger-zone h4{color:#dc2626;margin-bottom:8px;font-size:.8rem}
         .info-box{background:#eff6ff;border-left:4px solid #3b82f6;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:.8rem;color:#1e40af}
-        
         @media(max-width:768px){.nav{flex-direction:column;padding:12px 16px}.cards{grid-template-columns:repeat(2,1fr);gap:12px}.main{padding:16px}table{font-size:.7rem}th,td{padding:8px 10px}.tabs{flex-wrap:wrap}}
         @media(max-width:480px){.cards{grid-template-columns:1fr}.flex-row{flex-direction:column;align-items:stretch}}
     </style>
@@ -104,7 +87,7 @@
         <div class="logo-text"><h1>SUHA Constructions</h1><p>Admin Panel</p></div>
     </div>
     <div class="nav-links">
-        <a href="https://suhaconstructions.com" target="_blank" class="nav-btn website"><i class="fas fa-globe"></i> Website</a>
+        <a href="https://suhaconstructions.com" target="_blank" rel="noopener noreferrer" class="nav-btn website"><i class="fas fa-globe"></i> Website</a>
         <a href="index.html" class="nav-btn"><i class="fas fa-external-link-alt"></i> Main App</a>
         <span style="color:#22c55e;font-size:.72rem;font-weight:600">● ADMIN</span>
     </div>
@@ -121,476 +104,196 @@
             <button class="tab-btn" onclick="showTab('users',this)">👥 Users</button>
             <button class="tab-btn" onclick="showTab('otp',this)">🔑 OTP</button>
             <button class="tab-btn" onclick="showTab('biometric',this)">🔐 Biometric</button>
+            <button class="tab-btn" onclick="showTab('logs',this)">📋 History</button>
             <button class="tab-btn" onclick="showTab('settings',this)">⚙️ Settings</button>
             <button class="tab-btn" onclick="showTab('backup',this)">💾 Backup</button>
         </div>
     </div>
-    <div id="tabContent">
-        <div style="text-align:center;padding:60px;color:#64748b">Loading...</div>
-    </div>
+    <div id="tabContent"><div style="text-align:center;padding:60px;color:#64748b">Loading...</div></div>
 </div>
 
 <div class="modal" id="modal"><div class="modal-box"><button class="btn-close" onclick="closeModal()">✕</button><div id="modalContent"></div></div></div>
 
 <script>
-// ===== CONFIGURATION =====
 const SB_URL='https://nfrhcacqjizdgkimraeq.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mcmhjYWNxaml6ZGdraW1yYWVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNzkyNjIsImV4cCI6MjA5Mjk1NTI2Mn0.RY-Zg6uPz82d7d8kKtH-axioVT39-iQj1l_wbGWPKHI';
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
-// ===== GLOBAL STATE =====
 let users=[],otpRequests=[],logs=[];
-let settings={
-    companyName:'SUHA Constructions',
-    companyPhone:'+91 761-9147377',
-    companyEmail:'suhadesignbuilders@gmail.com',
-    companyWebsite:'https://suhaconstructions.com',
-    companyAddress:'Pandith Complex, Kannangar, Padubidri - 574111',
-    sessionTimeout:'720',
-    maxLoginAttempts:'5',
-    autoLogout:true,
-    biometricEnabled:true,
-    otpExpiryMinutes:'10',
-    notificationsEnabled:true,
-    offlineMode:true
-};
+let settings={companyName:'SUHA Constructions',companyPhone:'+91 761-9147377',companyEmail:'suhadesignbuilders@gmail.com',companyWebsite:'https://suhaconstructions.com',companyAddress:'Pandith Complex, Kannangar, Padubidri - 574111',sessionTimeout:'720',maxLoginAttempts:'5',autoLogout:true,biometricEnabled:true,otpExpiryMinutes:'10',notificationsEnabled:true,offlineMode:true};
 
-const defaultPermissions={
-    canAddSite:true,canEditSite:false,canDeleteSite:false,
-    canAddInventory:true,canEditInventory:false,canDeleteInventory:false,
-    canAddVendor:true,canEditVendor:false,canDeleteVendor:false,
-    canAddTransaction:true,canEditTransaction:false,canDeleteTransaction:false,
-    canViewReports:true,canExportPDF:true,canSendWhatsApp:false,
-    canManageUsers:false,canAccessAdmin:false
-};
+const defaultPermissions={canAddSite:true,canEditSite:false,canDeleteSite:false,canAddInventory:true,canEditInventory:false,canDeleteInventory:false,canAddVendor:true,canEditVendor:false,canDeleteVendor:false,canAddTransaction:true,canEditTransaction:false,canDeleteTransaction:false,canViewReports:true,canExportPDF:true,canSendWhatsApp:false,canManageUsers:false,canAccessAdmin:false};
 
-// ===== UTILITY =====
-function toast(m){
-    const e=document.querySelector('.toast');if(e)e.remove();
-    const t=document.createElement('div');t.className='toast';t.textContent=m;
-    document.body.appendChild(t);
-    setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300)},2500);
-}
+function toast(m){const e=document.querySelector('.toast');if(e)e.remove();const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300)},2500)}
+function openModal(h,c){document.getElementById('modal').style.display='flex';document.getElementById('modalContent').innerHTML=`<h3 style="margin-bottom:16px;font-size:1rem">${h}</h3>${c}<div style="display:flex;gap:10px;margin-top:18px"><button class="btn btn-green" id="mSave" style="flex:1">💾 Save</button><button class="btn" style="flex:1;background:#64748b" onclick="closeModal()">Cancel</button></div>`}
+function closeModal(){document.getElementById('modal').style.display='none'}
+function fmtDate(d){if(!d)return'-';try{return new Date(d).toLocaleDateString('en-IN')+' '+new Date(d).toLocaleTimeString('en-IN')}catch(e){return String(d).slice(0,16)}}
+function saveLocal(){localStorage.setItem('suha_admin_data',JSON.stringify({users,otpRequests,logs,settings}))}
+function loadLocal(){const d=localStorage.getItem('suha_admin_data');if(d){try{const data=JSON.parse(d);users=data.users||[];otpRequests=data.otpRequests||[];logs=data.logs||[];if(data.settings)settings={...settings,...data.settings}}catch(e){}}}
 
-function openModal(h,c){
-    document.getElementById('modal').style.display='flex';
-    document.getElementById('modalContent').innerHTML=`
-        <h3 style="margin-bottom:16px;font-size:1rem">${h}</h3>${c}
-        <div style="display:flex;gap:10px;margin-top:18px">
-            <button class="btn btn-green" id="mSave" style="flex:1">💾 Save</button>
-            <button class="btn" style="flex:1;background:#64748b" onclick="closeModal()">Cancel</button>
-        </div>`;
-}
-
-function closeModal(){document.getElementById('modal').style.display='none';}
-
-function fmtDate(d){
-    if(!d)return'-';
-    try{return new Date(d).toLocaleDateString('en-IN')}catch(e){return String(d).slice(0,10)}
-}
-
-function saveLocal(){
-    localStorage.setItem('suha_admin_data',JSON.stringify({users,otpRequests,logs,settings}));
-}
-
-function loadLocal(){
-    const d=localStorage.getItem('suha_admin_data');
-    if(d){
-        try{
-            const data=JSON.parse(d);
-            users=data.users||[];
-            otpRequests=data.otpRequests||[];
-            logs=data.logs||[];
-            if(data.settings)settings={...settings,...data.settings};
-        }catch(e){console.error('Load local error:',e)}
-    }
-}
-
-// ===== DATA LOADING =====
 async function loadData(){
     try{
-        const res=await Promise.all([
-            sb.from('allowed_users').select('*').order('created_at',{ascending:false}),
-            sb.from('otp_requests').select('*').order('created_at',{ascending:false}).limit(100),
-            sb.from('activity_logs').select('*').order('created_at',{ascending:false}).limit(50),
-            sb.from('system_settings').select('*')
-        ]);
-        if(res[0].data)users=res[0].data;
-        if(res[1].data)otpRequests=res[1].data;
-        if(res[2].data)logs=res[2].data;
-        if(res[3].data)res[3].data.forEach(x=>{settings[x.key]=isNaN(x.value)?x.value:Number(x.value)});
-    }catch(e){
-        console.log('Loading from local storage');
-        loadLocal();
-    }
-    
-    // Ensure at least admin user exists
-    if(!users.length){
-        users=[{
-            id:'u1',email:'suhadesignbuilders@gmail.com',full_name:'SUHA Admin',
-            password:'admin@123',role:'admin',active:true,can_login:true,
-            created_at:new Date().toISOString(),last_login:'Never',
-            biometric_enabled:false,biometric_device:'',biometric_date:'',
-            permissions:{
-                canAddSite:true,canEditSite:true,canDeleteSite:true,
-                canAddInventory:true,canEditInventory:true,canDeleteInventory:true,
-                canAddVendor:true,canEditVendor:true,canDeleteVendor:true,
-                canAddTransaction:true,canEditTransaction:true,canDeleteTransaction:true,
-                canViewReports:true,canExportPDF:true,canSendWhatsApp:true,
-                canManageUsers:true,canAccessAdmin:true
-            }
-        }];
-    }
-    saveLocal();
+        const res=await Promise.all([sb.from('allowed_users').select('*').order('created_at',{ascending:false}),sb.from('otp_requests').select('*').order('created_at',{ascending:false}).limit(200),sb.from('activity_logs').select('*').order('created_at',{ascending:false}).limit(500),sb.from('system_settings').select('*')]);
+        if(res[0].data)users=res[0].data;if(res[1].data)otpRequests=res[1].data;if(res[2].data)logs=res[2].data;
+        if(res[3].data)res[3].data.forEach(x=>{settings[x.key]=x.value});
+    }catch(e){loadLocal()}
+    if(!users.length){users=[{id:'u1',email:'suhadesignbuilders@gmail.com',full_name:'SUHA Admin',password:'admin@123',role:'admin',active:true,can_login:true,created_at:new Date().toISOString(),last_login:'Never',biometric_enabled:false,biometric_device:'',biometric_date:'',permissions:{canAddSite:true,canEditSite:true,canDeleteSite:true,canAddInventory:true,canEditInventory:true,canDeleteInventory:true,canAddVendor:true,canEditVendor:true,canDeleteVendor:true,canAddTransaction:true,canEditTransaction:true,canDeleteTransaction:true,canViewReports:true,canExportPDF:true,canSendWhatsApp:true,canManageUsers:true,canAccessAdmin:true}}]}
+    saveLocal()
 }
 
-// ===== TAB MANAGEMENT =====
 function showTab(tab,btn){
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     const c=document.getElementById('tabContent');
-    switch(tab){
-        case'dashboard':c.innerHTML=dashboardHTML();break;
-        case'users':c.innerHTML=usersHTML();break;
-        case'otp':c.innerHTML=otpHTML();break;
-        case'biometric':c.innerHTML=biometricHTML();break;
-        case'settings':c.innerHTML=settingsHTML();break;
-        case'backup':c.innerHTML=backupHTML();break;
-    }
+    switch(tab){case'dashboard':c.innerHTML=dashboardHTML();break;case'users':c.innerHTML=usersHTML();break;case'otp':c.innerHTML=otpHTML();break;case'biometric':c.innerHTML=biometricHTML();break;case'logs':c.innerHTML=logsHTML();break;case'settings':c.innerHTML=settingsHTML();break;case'backup':c.innerHTML=backupHTML();break}
 }
 
-// ===== RENDER FUNCTIONS =====
 function dashboardHTML(){
-    const admins=users.filter(u=>u.role==='admin').length;
-    const managers=users.filter(u=>u.role==='manager').length;
-    const staff=users.filter(u=>u.role==='staff').length;
-    const active=users.filter(u=>u.active).length;
-    const bio=users.filter(u=>u.biometric_enabled).length;
+    const admins=users.filter(u=>u.role==='admin').length,managers=users.filter(u=>u.role==='manager').length,staff=users.filter(u=>u.role==='staff').length;
+    const active=users.filter(u=>u.active).length,bio=users.filter(u=>u.biometric_enabled).length;
     const pendingOTP=otpRequests.filter(o=>!o.used&&new Date(o.expires_at)>new Date()).length;
-
-    return`
-    <div class="info-box">💡 <b>Quick Navigation:</b> Use tabs to manage users, OTP requests, biometrics & settings. <a href="index.html" style="color:#1e5f7a;font-weight:600">Open Main App →</a></div>
+    const todayLogs=logs.filter(l=>new Date(l.created_at).toDateString()===new Date().toDateString()).length;
+    return`<div class="info-box">💡 <b>Admin Panel:</b> Manage all users, view OTP requests, check activity history, and configure system settings. <a href="index.html" style="color:#1e5f7a;font-weight:600">Open Main App →</a></div>
     <div class="cards">
         <div class="card" onclick="showTab('users',document.querySelectorAll('.tab-btn')[1])"><div class="card-title">👥 Total Users</div><div class="card-value">${users.length}</div></div>
         <div class="card"><div class="card-title">👑 Admins</div><div class="card-value" style="color:#f59e0b">${admins}</div></div>
         <div class="card"><div class="card-title">👔 Managers</div><div class="card-value" style="color:#3b82f6">${managers}</div></div>
         <div class="card"><div class="card-title">👷 Staff</div><div class="card-value" style="color:#16a34a">${staff}</div></div>
         <div class="card"><div class="card-title">✅ Active</div><div class="card-value" style="color:#16a34a">${active}</div></div>
-        <div class="card" onclick="showTab('otp',document.querySelectorAll('.tab-btn')[2])"><div class="card-title">🔑 Pending OTPs</div><div class="card-value" style="color:#7c3aed">${pendingOTP}</div></div>
+        <div class="card" onclick="showTab('otp',document.querySelectorAll('.tab-btn')[2])"><div class="card-title">🔑 Pending OTP</div><div class="card-value" style="color:#7c3aed">${pendingOTP}</div></div>
         <div class="card" onclick="showTab('biometric',document.querySelectorAll('.tab-btn')[3])"><div class="card-title">🔐 Biometric</div><div class="card-value" style="color:#059669">${bio}</div></div>
+        <div class="card" onclick="showTab('logs',document.querySelectorAll('.tab-btn')[4])"><div class="card-title">📋 Today's Logs</div><div class="card-value" style="font-size:1.4rem">${todayLogs}</div></div>
     </div>
-    <div class="admin-card"><h3>🚀 Quick Actions</h3>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <div class="admin-card"><h3>🚀 Quick Actions</h3><div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn btn-green" onclick="addUserModal()">➕ Add User</button>
         <button class="btn btn-purple" onclick="showTab('otp',document.querySelectorAll('.tab-btn')[2])">🔑 View OTPs</button>
         <button class="btn btn-indigo" onclick="showTab('biometric',document.querySelectorAll('.tab-btn')[3])">🔐 Biometrics</button>
-        <a href="https://suhaconstructions.com" target="_blank" class="btn btn-orange"><i class="fas fa-globe"></i> Website</a>
+        <a href="https://suhaconstructions.com" target="_blank" rel="noopener noreferrer" class="btn btn-orange"><i class="fas fa-globe"></i> Website</a>
         <a href="index.html" class="btn"><i class="fas fa-external-link-alt"></i> Main App</a>
     </div></div>`;
 }
 
 function usersHTML(){
-    return`
-    <div class="flex-row">
-        <button class="btn btn-green" onclick="addUserModal()">➕ Add User</button>
-        <button class="btn btn-orange btn-sm" onclick="exportUsersCSV()">📥 Export CSV</button>
-    </div>
-    <div class="admin-card">
-        <div style="overflow-x:auto"><table>
-            <thead><tr><th>User</th><th>Role</th><th>Login</th><th>Site</th><th>Inventory</th><th>Vendor</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody>${users.length?users.map(u=>{
-                const p=u.permissions||defaultPermissions;
-                return`<tr>
-                    <td><div style="font-weight:600">${u.full_name||u.name||'N/A'}</div><div style="font-size:.65rem;color:#64748b">${u.email}</div></td>
-                    <td><span class="badge badge-${u.role||'staff'}">${u.role||'staff'}</span></td>
-                    <td>${u.can_login!==false?`<span class="badge badge-active">✅</span>`:`<span class="badge badge-locked">🔒</span>`}</td>
-                    <td>${p.canAddSite?`<span class="badge badge-success">✅</span>`:`<span class="badge badge-locked">🔒</span>`}</td>
-                    <td>${p.canAddInventory?`<span class="badge badge-success">✅</span>`:`<span class="badge badge-locked">🔒</span>`}</td>
-                    <td>${p.canAddVendor?`<span class="badge badge-success">✅</span>`:`<span class="badge badge-locked">🔒</span>`}</td>
-                    <td><span class="badge ${u.active!==false?'badge-active':'badge-error'}">${u.active!==false?'Active':'Inactive'}</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-purple" onclick="editPermissions('${u.id}')" title="Permissions" style="margin-right:4px">🔑</button>
-                        <button class="btn btn-sm" onclick="editUser('${u.id}')" title="Edit" style="margin-right:4px">✏️</button>
-                        <button class="btn btn-sm btn-red" onclick="deleteUser('${u.id}')" title="Delete">🗑️</button>
-                    </td>
-                </tr>`;
-            }).join(''):'<tr><td colspan="8" style="text-align:center;padding:30px;color:#64748b">No users found</td></tr>'}</tbody>
-        </table></div>
-    </div>`;
+    return`<div class="flex-row"><button class="btn btn-green" onclick="addUserModal()">➕ Add User</button><button class="btn btn-orange btn-sm" onclick="exportUsersCSV()">📥 Export CSV</button></div>
+    <div class="admin-card"><div style="overflow-x:auto"><table><thead><tr><th>User</th><th>Role</th><th>Login</th><th>Site</th><th>Inventory</th><th>Vendor</th><th>Status</th><th>Last Login</th><th>Actions</th></tr></thead>
+    <tbody>${users.length?users.map(u=>{const p=u.permissions||defaultPermissions;return`<tr>
+        <td><div style="font-weight:600">${u.full_name||u.name||'N/A'}</div><div style="font-size:.65rem;color:#64748b">${u.email}</div></td>
+        <td><span class="badge badge-${u.role||'staff'}">${u.role||'staff'}</span></td>
+        <td>${u.can_login!==false?`<span class="badge badge-active">✅</span>`:`<span class="badge badge-locked">🔒</span>`}</td>
+        <td>${p.canAddSite?`<span class="badge badge-success">✅</span>`:`<span class="badge badge-locked">🔒</span>`}</td>
+        <td>${p.canAddInventory?`<span class="badge badge-success">✅</span>`:`<span class="badge badge-locked">🔒</span>`}</td>
+        <td>${p.canAddVendor?`<span class="badge badge-success">✅</span>`:`<span class="badge badge-locked">🔒</span>`}</td>
+        <td><span class="badge ${u.active!==false?'badge-active':'badge-error'}">${u.active!==false?'Active':'Inactive'}</span></td>
+        <td style="font-size:.7rem">${u.last_login||'Never'}</td>
+        <td><button class="btn btn-sm btn-purple" onclick="editPermissions('${u.id}')" title="Permissions" style="margin-right:4px">🔑</button><button class="btn btn-sm" onclick="editUser('${u.id}')" title="Edit" style="margin-right:4px">✏️</button><button class="btn btn-sm btn-red" onclick="deleteUser('${u.id}')" title="Delete">🗑️</button></td>
+    </tr>`}).join(''):'<tr><td colspan="9" style="text-align:center;padding:30px;color:#64748b">No users found</td></tr>'}</tbody></table></div></div>`;
 }
 
 function otpHTML(){
     const pending=otpRequests.filter(o=>!o.used&&new Date(o.expires_at)>new Date());
-    return`
-    <div class="info-box">🔑 <b>OTP Password Reset:</b> Users request OTP from login page. Admin sees the OTP code here and shares it with the user. OTP expires in ${settings.otpExpiryMinutes||10} minutes.</div>
-    <div class="admin-card"><h3>📋 Active OTP Requests</h3>
-    <div style="overflow-x:auto"><table>
-        <thead><tr><th>Email</th><th>OTP Code</th><th>Requested</th><th>Expires</th><th>Action</th></tr></thead>
-        <tbody>${pending.length?pending.map(o=>`<tr>
-            <td>${o.email}</td>
-            <td><span style="font-size:1.2rem;font-weight:800;color:#16a34a;letter-spacing:4px">${o.otp_code}</span></td>
-            <td>${fmtDate(o.created_at)}</td>
-            <td>${fmtDate(o.expires_at)}</td>
-            <td><button class="btn btn-sm btn-green" onclick="copyOTP('${o.otp_code}')">📋 Copy OTP</button></td>
-        </tr>`).join(''):'<tr><td colspan="5" style="text-align:center;padding:30px;color:#64748b">No pending OTP requests</td></tr>'}</tbody>
-    </table></div></div>
-    <div class="admin-card"><h3>📜 OTP History</h3>
-    <div style="overflow-x:auto;max-height:400px;overflow-y:auto"><table>
-        <thead><tr><th>Email</th><th>OTP</th><th>Status</th><th>Created</th></tr></thead>
-        <tbody>${otpRequests.length?otpRequests.slice(0,30).map(o=>`<tr>
-            <td>${o.email}</td><td>${o.otp_code}</td>
-            <td><span class="badge ${o.used?'badge-success':new Date(o.expires_at)<new Date()?'badge-error':'badge-warning'}">${o.used?'Used':new Date(o.expires_at)<new Date()?'Expired':'Active'}</span></td>
-            <td>${fmtDate(o.created_at)}</td>
-        </tr>`).join(''):'<tr><td colspan="4" style="text-align:center;padding:30px">No OTP history</td></tr>'}</tbody>
-    </table></div></div>`;
+    const used=otpRequests.filter(o=>o.used).length;
+    const expired=otpRequests.filter(o=>!o.used&&new Date(o.expires_at)<=new Date()).length;
+    return`<div class="info-box">🔑 <b>OTP Management:</b> When users click "Forgot Password" on login page, OTP appears here. Share the code with the user. OTP expires in ${settings.otpExpiryMinutes||10} minutes.</div>
+    <div class="cards">
+        <div class="card"><div class="card-title">Active OTPs</div><div class="card-value" style="color:#16a34a;font-size:1.4rem">${pending.length}</div></div>
+        <div class="card"><div class="card-title">Used OTPs</div><div class="card-value" style="color:#3b82f6;font-size:1.4rem">${used}</div></div>
+        <div class="card"><div class="card-title">Expired</div><div class="card-value" style="color:#dc2626;font-size:1.4rem">${expired}</div></div>
+        <div class="card"><div class="card-title">Total</div><div class="card-value" style="font-size:1.4rem">${otpRequests.length}</div></div>
+    </div>
+    <div class="admin-card"><h3>📋 Active OTP Requests</h3><div style="overflow-x:auto"><table><thead><tr><th>Email</th><th>OTP Code</th><th>Requested</th><th>Expires</th><th>Action</th></tr></thead>
+    <tbody>${pending.length?pending.map(o=>`<tr><td>${o.email}</td><td><span style="font-size:1.2rem;font-weight:800;color:#16a34a;letter-spacing:4px">${o.otp_code}</span></td><td>${fmtDate(o.created_at)}</td><td>${fmtDate(o.expires_at)}</td><td><button class="btn btn-sm btn-green" onclick="copyOTP('${o.otp_code}')">📋 Copy OTP</button></td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;padding:30px;color:#64748b">No pending OTP requests</td></tr>'}</tbody></table></div></div>
+    <div class="admin-card"><h3>📜 OTP History (Last 50)</h3><div style="overflow-x:auto;max-height:400px;overflow-y:auto"><table><thead><tr><th>Email</th><th>OTP</th><th>Status</th><th>Requested</th></tr></thead>
+    <tbody>${otpRequests.slice(0,50).length?otpRequests.slice(0,50).map(o=>`<tr><td>${o.email}</td><td>${o.otp_code}</td><td><span class="badge ${o.used?'badge-success':new Date(o.expires_at)<new Date()?'badge-error':'badge-warning'}">${o.used?'Used':new Date(o.expires_at)<new Date()?'Expired':'Active'}</span></td><td>${fmtDate(o.created_at)}</td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center;padding:30px">No OTP history</td></tr>'}</tbody></table></div></div>`;
 }
 
-function copyOTP(code){
-    navigator.clipboard.writeText(code).then(()=>toast('📋 OTP copied to clipboard!')).catch(()=>{
-        const ta=document.createElement('textarea');ta.value=code;document.body.appendChild(ta);ta.select();
-        document.execCommand('copy');document.body.removeChild(ta);toast('📋 OTP copied!');
-    });
-}
+function copyOTP(code){navigator.clipboard.writeText(code).then(()=>toast('📋 OTP copied!')).catch(()=>{const ta=document.createElement('textarea');ta.value=code;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('📋 OTP copied!')})}
 
 function biometricHTML(){
     const bioUsers=users.filter(u=>u.biometric_enabled);
-    return`<div class="admin-card"><h3>🔐 Biometric Users (${bioUsers.length})</h3>
-    <p style="color:#64748b;font-size:.78rem;margin-bottom:12px">Admin can remove biometric access. User must re-register fingerprint to use it again.</p>
-    <div style="overflow-x:auto"><table>
-        <thead><tr><th>User</th><th>Device</th><th>Registered</th><th>Action</th></tr></thead>
-        <tbody>${bioUsers.length?bioUsers.map(u=>`<tr>
-            <td><div style="font-weight:600">${u.full_name||u.name||'N/A'}</div><div style="font-size:.65rem;color:#64748b">${u.email}</div></td>
-            <td>${u.biometric_device||'Unknown'}</td>
-            <td>${u.biometric_date||'Unknown'}</td>
-            <td><button class="btn btn-sm btn-red" onclick="removeBiometric('${u.id}')">🔓 Remove</button></td>
-        </tr>`).join(''):'<tr><td colspan="4" style="text-align:center;padding:30px">No biometric users</td></tr>'}</tbody>
-    </table></div></div>`;
+    return`<div class="info-box">🔐 <b>Biometric Management:</b> View users with fingerprint/face unlock enabled. Remove access if needed - user must re-register.</div>
+    <div class="admin-card"><h3>🔐 Biometric Users (${bioUsers.length})</h3><div style="overflow-x:auto"><table><thead><tr><th>User</th><th>Device</th><th>Registered</th><th>Action</th></tr></thead>
+    <tbody>${bioUsers.length?bioUsers.map(u=>`<tr><td><div style="font-weight:600">${u.full_name||u.name||'N/A'}</div><div style="font-size:.65rem;color:#64748b">${u.email}</div></td><td><i class="fas fa-mobile-alt"></i> ${u.biometric_device||'Unknown'}</td><td>${u.biometric_date||'Unknown'}</td><td><button class="btn btn-sm btn-red" onclick="removeBiometric('${u.id}')">🔓 Remove</button></td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center;padding:30px">No biometric users</td></tr>'}</tbody></table></div></div>`;
 }
 
-function removeBiometric(userId){
-    const u=users.find(x=>x.id===userId);
-    if(!u||!confirm(`Remove biometric access for ${u.full_name||u.email}?`))return;
-    u.biometric_enabled=false;u.biometric_device='';u.biometric_date='';
-    saveLocal();
-    sb.from('allowed_users').update({biometric_enabled:false,biometric_device:'',biometric_date:''}).eq('id',userId).then(()=>{}).catch(()=>{});
-    toast('🔓 Biometric removed!');
-    showTab('biometric',document.querySelectorAll('.tab-btn')[3]);
+function removeBiometric(userId){const u=users.find(x=>x.id===userId);if(!u||!confirm(`Remove biometric for ${u.full_name||u.email}?`))return;u.biometric_enabled=false;u.biometric_device='';u.biometric_date='';saveLocal();sb.from('allowed_users').update({biometric_enabled:false,biometric_device:'',biometric_date:''}).eq('id',userId).then(()=>{}).catch(()=>{});logActivity('BIOMETRIC_REMOVED',`Removed biometric for ${u.email}`);toast('🔓 Removed!');showTab('biometric',document.querySelectorAll('.tab-btn')[3])}
+
+function logActivity(action,details,email='admin@suha.com'){const entry={user_email:email,action,details,ip_address:'Admin Panel',created_at:new Date().toISOString()};logs.unshift(entry);saveLocal();sb.from('activity_logs').insert([entry]).then(()=>{}).catch(()=>{})}
+
+function logsHTML(){
+    const today=logs.filter(l=>new Date(l.created_at).toDateString()===new Date().toDateString()).length;
+    const week=logs.filter(l=>{const d=new Date(l.created_at);const w=new Date();w.setDate(w.getDate()-7);return d>=w}).length;
+    const logins=logs.filter(l=>l.action&&l.action.includes('LOGIN')).length;
+    const errors=logs.filter(l=>l.action&&(l.action.includes('FAILED')||l.action.includes('DENIED')||l.action.includes('ERROR'))).length;
+    return`
+    <div class="cards">
+        <div class="card"><div class="card-title">📋 Total Logs</div><div class="card-value" style="font-size:1.4rem">${logs.length}</div></div>
+        <div class="card"><div class="card-title">📅 Today</div><div class="card-value" style="font-size:1.4rem;color:#16a34a">${today}</div></div>
+        <div class="card"><div class="card-title">📆 This Week</div><div class="card-value" style="font-size:1.4rem;color:#3b82f6">${week}</div></div>
+        <div class="card"><div class="card-title">🔐 Logins</div><div class="card-value" style="font-size:1.4rem;color:#16a34a">${logins}</div></div>
+        <div class="card"><div class="card-title">❌ Errors</div><div class="card-value" style="font-size:1.4rem;color:#dc2626">${errors}</div></div>
+    </div>
+    <div class="flex-row"><div class="tabs" id="logFilters">
+        <button class="tab-btn active" onclick="filterLogs('ALL',this)">📋 All</button>
+        <button class="tab-btn" onclick="filterLogs('LOGIN',this)">🔐 Login</button>
+        <button class="tab-btn" onclick="filterLogs('USER',this)">👥 User</button>
+        <button class="tab-btn" onclick="filterLogs('TRANSACTION',this)">💳 Transaction</button>
+        <button class="tab-btn" onclick="filterLogs('SETTINGS',this)">⚙️ Settings</button>
+        <button class="tab-btn" onclick="filterLogs('BIOMETRIC',this)">🔐 Biometric</button>
+        <button class="tab-btn" onclick="filterLogs('OTP',this)">🔑 OTP</button>
+    </div><button class="btn btn-red btn-sm" onclick="clearAllLogs()">🗑️ Clear All</button></div>
+    <div class="admin-card"><h3>📋 Complete Activity History</h3><div style="overflow-x:auto;max-height:600px;overflow-y:auto"><table><thead><tr><th>#</th><th>Date & Time</th><th>User</th><th>Action</th><th>Details</th><th>IP</th></tr></thead>
+    <tbody id="logsTableBody">${logs.length?logs.map((l,i)=>`<tr><td style="color:#64748b;font-size:.7rem">${i+1}</td><td style="white-space:nowrap;font-size:.7rem">${fmtDate(l.created_at)}</td><td style="font-size:.7rem">${l.user_email||'System'}</td><td><span class="badge ${getBadge(l.action)}">${(l.action||'').replace(/_/g,' ')}</span></td><td style="font-size:.7rem">${l.details||'-'}</td><td style="font-size:.65rem;color:#64748b">${l.ip_address||'-'}</td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;padding:40px;color:#64748b"><i class="fas fa-inbox" style="font-size:2rem;display:block;margin-bottom:10px"></i>No activity logs yet</td></tr>'}</tbody></table></div></div>`;
 }
+
+function getBadge(a){if(!a)return'badge-staff';const x=a.toUpperCase();if(x.includes('LOGIN')||x.includes('AUTH'))return'badge-manager';if(x.includes('ADDED')||x.includes('CREATED')||x.includes('SUCCESS'))return'badge-success';if(x.includes('DELETE')||x.includes('REMOVE')||x.includes('FAILED')||x.includes('DENIED')||x.includes('ERROR'))return'badge-error';if(x.includes('UPDATE')||x.includes('EDIT')||x.includes('CHANGE'))return'badge-warning';if(x.includes('OTP')||x.includes('PASSWORD'))return'badge-admin';if(x.includes('SETTINGS')||x.includes('CONFIG'))return'badge-admin';if(x.includes('BIOMETRIC')||x.includes('FINGERPRINT'))return'badge-staff';return'badge-staff'}
+
+function filterLogs(type,btn){document.querySelectorAll('#logFilters .tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const tbody=document.getElementById('logsTableBody');let f=logs;if(type!=='ALL')f=logs.filter(l=>l.action&&l.action.toUpperCase().includes(type));tbody.innerHTML=f.length?f.map((l,i)=>`<tr><td style="color:#64748b;font-size:.7rem">${i+1}</td><td style="white-space:nowrap;font-size:.7rem">${fmtDate(l.created_at)}</td><td style="font-size:.7rem">${l.user_email||'System'}</td><td><span class="badge ${getBadge(l.action)}">${(l.action||'').replace(/_/g,' ')}</span></td><td style="font-size:.7rem">${l.details||'-'}</td><td style="font-size:.65rem;color:#64748b">${l.ip_address||'-'}</td></tr>`).join(''):`<tr><td colspan="6" style="text-align:center;padding:40px;color:#64748b">No ${type.toLowerCase()} activities</td></tr>`}
+function clearAllLogs(){if(!confirm('Delete ALL activity logs? This cannot be undone!'))return;logs=[];saveLocal();sb.from('activity_logs').delete().neq('id','00000000-0000-0000-0000-000000000000').then(()=>{}).catch(()=>{});toast('🗑️ All logs cleared!');showTab('logs',document.querySelectorAll('.tab-btn')[4])}
 
 function settingsHTML(){
-    return`<div class="admin-card"><h3>⚙️ System Settings</h3>
-    ${Object.entries(settings).map(([k,v])=>`<div class="setting-row">
-        <div>
-            <div style="font-weight:600;font-size:.85rem">${k.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())}</div>
-            <div style="color:#64748b;font-size:.7rem">${typeof v==='boolean'?'Toggle on/off':'Current value'}</div>
-        </div>
-        ${typeof v==='boolean'?
-            `<label class="toggle-switch"><input type="checkbox" ${v?'checked':''} onchange="settings['${k}']=this.checked;saveLocal()"><span class="toggle-slider"></span></label>`:
-            `<input value="${v}" onchange="settings['${k}']=this.value;saveLocal()" style="width:auto;min-width:200px">`
-        }
-    </div>`).join('')}
-    <button class="btn btn-green" onclick="saveSettingsToDB();toast('✅ Settings saved!')" style="margin-top:14px">💾 Save Settings</button></div>
-    <div class="danger-zone"><h4>⚠️ Danger Zone</h4>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
+    return`<div class="admin-card"><h3>⚙️ System Settings</h3>${Object.entries(settings).map(([k,v])=>`<div class="setting-row"><div><div style="font-weight:600;font-size:.85rem">${k.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())}</div><div style="color:#64748b;font-size:.7rem">${typeof v==='boolean'?'Toggle on/off':'Current value'}</div></div>${typeof v==='boolean'?`<label class="toggle-switch"><input type="checkbox" ${v?'checked':''} onchange="settings['${k}']=this.checked;saveLocal()"><span class="toggle-slider"></span></label>`:`<input value="${v}" onchange="settings['${k}']=this.value;saveLocal()" style="width:auto;min-width:200px">`}</div>`).join('')}<button class="btn btn-green" onclick="saveSettingsToDB();toast('✅ Settings saved!')" style="margin-top:14px">💾 Save Settings</button></div>
+    <div class="danger-zone"><h4>⚠️ Danger Zone</h4><p style="font-size:.75rem;color:#64748b;margin-bottom:12px">Bulk actions for all users. Use with caution.</p><div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn btn-red btn-sm" onclick="massLock('site')">🔒 Lock Staff - Sites</button>
         <button class="btn btn-red btn-sm" onclick="massLock('inventory')">🔒 Lock Staff - Inventory</button>
         <button class="btn btn-red btn-sm" onclick="massLock('vendor')">🔒 Lock Staff - Vendors</button>
-        <button class="btn btn-orange btn-sm" onclick="if(confirm('Remove ALL biometric access?')){users.forEach(u=>{u.biometric_enabled=false;u.biometric_device='';u.biometric_date=''});saveLocal();sb.from('allowed_users').update({biometric_enabled:false,biometric_device:'',biometric_date:''}).neq('id','').then(()=>{}).catch(()=>{});showTab('biometric',document.querySelectorAll('.tab-btn')[3]);toast('🔓 All biometrics removed!')}">🔓 Remove All Biometrics</button>
+        <button class="btn btn-orange btn-sm" onclick="if(confirm('Remove ALL biometric access?')){users.forEach(u=>{u.biometric_enabled=false;u.biometric_device='';u.biometric_date=''});saveLocal();sb.from('allowed_users').update({biometric_enabled:false,biometric_device:'',biometric_date:''}).neq('id','').then(()=>{}).catch(()=>{});logActivity('MASS_BIOMETRIC_REMOVE','Removed all biometrics');showTab('biometric',document.querySelectorAll('.tab-btn')[3]);toast('🔓 All removed!')}">🔓 Remove All Biometrics</button>
     </div></div>`;
 }
 
-async function saveSettingsToDB(){
-    try{
-        for(const[k,v]of Object.entries(settings)){
-            await sb.from('system_settings').upsert({key:k,value:String(v)},{onConflict:'key'});
-        }
-    }catch(e){console.log('Save settings error:',e)}
-    saveLocal();
-}
+async function saveSettingsToDB(){try{for(const[k,v]of Object.entries(settings)){await sb.from('system_settings').upsert({key:k,value:String(v)},{onConflict:'key'})}logActivity('SETTINGS_UPDATED','System settings modified')}catch(e){}saveLocal()}
 
-function massLock(type){
-    const labels={site:'sites',inventory:'inventory',vendor:'vendors'};
-    const keys={site:['canAddSite','canEditSite','canDeleteSite'],inventory:['canAddInventory','canEditInventory','canDeleteInventory'],vendor:['canAddVendor','canEditVendor','canDeleteVendor']};
-    if(!confirm(`Lock ALL staff from managing ${labels[type]}?`))return;
-    users.forEach(u=>{
-        if(u.role==='staff'){
-            const p=u.permissions||JSON.parse(JSON.stringify(defaultPermissions));
-            keys[type].forEach(k=>p[k]=false);
-            u.permissions=p;
-        }
-    });
-    saveLocal();
-    toast(`🔒 Staff locked from ${labels[type]}!`);
-    showTab('users',document.querySelectorAll('.tab-btn')[1]);
-}
+function massLock(type){const labels={site:'sites',inventory:'inventory',vendor:'vendors'};const keys={site:['canAddSite','canEditSite','canDeleteSite'],inventory:['canAddInventory','canEditInventory','canDeleteInventory'],vendor:['canAddVendor','canEditVendor','canDeleteVendor']};if(!confirm(`Lock ALL staff from managing ${labels[type]}?`))return;users.forEach(u=>{if(u.role==='staff'){const p=u.permissions||JSON.parse(JSON.stringify(defaultPermissions));keys[type].forEach(k=>p[k]=false);u.permissions=p}});saveLocal();logActivity('MASS_LOCK',`Locked all staff from ${labels[type]}`);toast(`🔒 Staff locked from ${labels[type]}!`);showTab('users',document.querySelectorAll('.tab-btn')[1])}
 
-function backupHTML(){
-    return`<div class="admin-card"><h3>💾 Data Backup & Restore</h3>
-    <div style="margin-bottom:20px">
-        <p style="font-size:.85rem;color:#334155;margin-bottom:12px"><b>Current Data:</b> ${users.length} users, ${otpRequests.length} OTP records</p>
-        <button class="btn btn-purple" onclick="downloadBackup()"><i class="fas fa-download"></i> Download Backup</button>
-    </div>
-    <div style="border-top:1px solid #e8edf2;padding-top:20px">
-        <h4 style="font-size:.85rem;color:#1e5f7a;margin-bottom:12px">📤 Restore from Backup</h4>
-        <input type="file" accept=".json" onchange="restoreBackup(this)" style="padding:10px">
-        <p style="font-size:.7rem;color:#dc2626;margin-top:8px">⚠️ This will overwrite all current data!</p>
-    </div></div>`;
-}
+function backupHTML(){return`<div class="admin-card"><h3>💾 Data Backup & Restore</h3><div style="margin-bottom:20px"><p style="font-size:.85rem;color:#334155;margin-bottom:12px"><b>Current Data:</b> ${users.length} users, ${otpRequests.length} OTP records, ${logs.length} activity logs</p><button class="btn btn-purple" onclick="downloadBackup()"><i class="fas fa-download"></i> Download Backup</button></div><div style="border-top:1px solid #e8edf2;padding-top:20px"><h4 style="font-size:.85rem;color:#1e5f7a;margin-bottom:12px">📤 Restore from Backup</h4><input type="file" accept=".json" onchange="restoreBackup(this)" style="padding:10px"><p style="font-size:.7rem;color:#dc2626;margin-top:8px">⚠️ This will overwrite ALL current data!</p></div></div>`}
 
-function downloadBackup(){
-    const data={exported:new Date().toISOString(),version:'3.0',users,otpRequests,logs,settings};
-    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-    a.download=`SUHA_AdminBackup_${new Date().toISOString().slice(0,10)}.json`;a.click();
-    toast('💾 Backup downloaded!');
-}
+function downloadBackup(){const d={exported:new Date().toISOString(),version:'3.0',users,otpRequests,logs,settings};const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`SUHA_AdminBackup_${new Date().toISOString().slice(0,10)}.json`;a.click();logActivity('BACKUP_CREATED','Manual backup downloaded');toast('💾 Backup downloaded!')}
+function restoreBackup(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=function(e){try{const d=JSON.parse(e.target.result);if(!confirm('Restore backup? This will overwrite ALL data!'))return;if(d.users)users=d.users;if(d.otpRequests)otpRequests=d.otpRequests;if(d.logs)logs=d.logs;if(d.settings)settings={...settings,...d.settings};saveLocal();logActivity('BACKUP_RESTORED','System restored from backup');toast('✅ Data restored!');showTab('dashboard',document.querySelector('.tab-btn.active'))}catch(err){toast('❌ Invalid backup file')}};r.readAsText(f)}
 
-function restoreBackup(input){
-    const file=input.files[0];if(!file)return;
-    const reader=new FileReader();
-    reader.onload=function(e){
-        try{
-            const data=JSON.parse(e.target.result);
-            if(!confirm('Restore backup? This will overwrite all current data!'))return;
-            if(data.users)users=data.users;
-            if(data.otpRequests)otpRequests=data.otpRequests;
-            if(data.logs)logs=data.logs;
-            if(data.settings)settings={...settings,...data.settings};
-            saveLocal();
-            toast('✅ Data restored!');
-            showTab('dashboard',document.querySelector('.tab-btn.active'));
-        }catch(err){toast('❌ Invalid backup file')}
-    };
-    reader.readAsText(file);
-}
-
-// ===== USER MANAGEMENT =====
-function addUserModal(){
-    openModal('➕ Add New User',`
-        <div class="form-group"><label>Email <span style="color:#dc2626">*</span></label><input id="newEmail" type="email" placeholder="user@example.com" autofocus></div>
-        <div class="form-group"><label>Full Name <span style="color:#dc2626">*</span></label><input id="newName" placeholder="John Doe"></div>
-        <div class="form-group"><label>Password <span style="color:#dc2626">*</span></label><input id="newPass" type="text" value="pass@123"></div>
-        <div class="form-group"><label>Role</label><select id="newRole"><option value="staff">👷 Staff</option><option value="manager">👔 Manager</option><option value="admin">👑 Admin</option></select></div>
-        <div class="form-group"><label>Login Access</label><select id="newLogin"><option value="1">✅ Allowed</option><option value="0">🔒 Blocked</option></select></div>
-        <label style="font-weight:600;display:block;margin-bottom:4px;font-size:.78rem;color:#334155">Permissions</label>
-        <div class="permission-grid">${Object.entries(defaultPermissions).map(([k,v])=>`<div class="perm-item"><label class="toggle-switch"><input type="checkbox" ${v?'checked':''} id="new_${k}"><span class="toggle-slider"></span></label><span style="font-size:.7rem">${k.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())}</span></div>`).join('')}</div>
-    `);
+function addUserModal(){openModal('➕ Add New User',`<div class="form-group"><label>Email <span class="req">*</span></label><input id="newEmail" type="email" placeholder="user@example.com" autofocus></div><div class="form-group"><label>Full Name <span class="req">*</span></label><input id="newName" placeholder="John Doe"></div><div class="form-group"><label>Password <span class="req">*</span></label><input id="newPass" type="text" value="pass@123"></div><div class="form-group"><label>Role</label><select id="newRole"><option value="staff">👷 Staff</option><option value="manager">👔 Manager</option><option value="admin">👑 Admin</option></select></div><div class="form-group"><label>Login Access</label><select id="newLogin"><option value="1">✅ Allowed</option><option value="0">🔒 Blocked</option></select></div><label style="font-weight:600;display:block;margin-bottom:4px;font-size:.78rem;color:#334155">Permissions</label><div class="permission-grid">${Object.entries(defaultPermissions).map(([k,v])=>`<div class="perm-item"><label class="toggle-switch"><input type="checkbox" ${v?'checked':''} id="new_${k}"><span class="toggle-slider"></span></label><span style="font-size:.7rem">${k.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())}</span></div>`).join('')}</div>`);
     document.getElementById('mSave').onclick=async function(){
-        const email=document.getElementById('newEmail').value.trim();
-        const name=document.getElementById('newName').value.trim();
-        const pass=document.getElementById('newPass').value;
-        const role=document.getElementById('newRole').value;
-        const canLogin=document.getElementById('newLogin').value==='1';
+        const email=document.getElementById('newEmail').value.trim(),name=document.getElementById('newName').value.trim(),pass=document.getElementById('newPass').value,role=document.getElementById('newRole').value,canLogin=document.getElementById('newLogin').value==='1';
         if(!email||!name||!pass){toast('Fill all required fields');return}
         if(pass.length<6){toast('Password must be 6+ characters');return}
-        const perms={};
-        Object.keys(defaultPermissions).forEach(k=>{const el=document.getElementById('new_'+k);perms[k]=el?el.checked:false});
-        const newUser={
-            id:'u'+Date.now(),email,full_name:name,password:pass,role,
-            active:canLogin,can_login:canLogin,
-            created_at:new Date().toISOString(),last_login:'Never',
-            biometric_enabled:false,biometric_device:'',biometric_date:'',
-            permissions:perms
-        };
-        try{
-            await sb.from('allowed_users').insert([newUser]);
-        }catch(e){console.log('DB insert error:',e)}
-        users.unshift(newUser);
-        saveLocal();
-        closeModal();
-        toast('✅ User added!');
-        showTab('users',document.querySelectorAll('.tab-btn')[1]);
+        const perms={};Object.keys(defaultPermissions).forEach(k=>{const el=document.getElementById('new_'+k);perms[k]=el?el.checked:false});
+        const newUser={id:'u'+Date.now(),email,full_name:name,password:pass,role,active:canLogin,can_login:canLogin,created_at:new Date().toISOString(),last_login:'Never',biometric_enabled:false,biometric_device:'',biometric_date:'',permissions:perms};
+        try{await sb.from('allowed_users').insert([newUser])}catch(e){}
+        users.unshift(newUser);saveLocal();logActivity('USER_ADDED',`Added user: ${email} (${role})`);closeModal();toast('✅ User added!');showTab('users',document.querySelectorAll('.tab-btn')[1]);
     };
 }
 
-function editUser(id){
-    const u=users.find(x=>x.id===id);if(!u)return;
-    openModal('✏️ Edit User',`
-        <div class="form-group"><label>Email</label><input value="${u.email}" readonly style="background:#f1f5f9"></div>
-        <div class="form-group"><label>Full Name</label><input id="editName" value="${u.full_name||u.name||''}"></div>
-        <div class="form-group"><label>New Password (leave blank to keep)</label><input id="editPass" type="text" placeholder="New password (optional)"></div>
-        <div class="form-group"><label>Role</label><select id="editRole"><option value="admin" ${u.role==='admin'?'selected':''}>👑 Admin</option><option value="manager" ${u.role==='manager'?'selected':''}>👔 Manager</option><option value="staff" ${u.role==='staff'?'selected':''}>👷 Staff</option></select></div>
-        <div class="form-group"><label>Login Access</label><select id="editLogin"><option value="1" ${u.can_login!==false?'selected':''}>✅ Allowed</option><option value="0" ${u.can_login===false?'selected':''}>🔒 Blocked</option></select></div>
-        <div class="form-group"><label>Account Status</label><select id="editActive"><option value="1" ${u.active!==false?'selected':''}>Active</option><option value="0" ${u.active===false?'selected':''}>Inactive</option></select></div>
-    `);
-    document.getElementById('mSave').onclick=function(){
-        u.full_name=document.getElementById('editName').value.trim();
-        const p=document.getElementById('editPass').value;if(p&&p.length>=6)u.password=p;
-        u.role=document.getElementById('editRole').value;
-        u.can_login=document.getElementById('editLogin').value==='1';
-        u.active=document.getElementById('editActive').value==='1';
-        if(!u.can_login)u.active=false;
-        try{
-            sb.from('allowed_users').update({
-                full_name:u.full_name,password:u.password,role:u.role,
-                can_login:u.can_login,active:u.active
-            }).eq('id',id).then(()=>{}).catch(()=>{});
-        }catch(e){}
-        saveLocal();
-        closeModal();
-        toast('✅ User updated!');
-        showTab('users',document.querySelectorAll('.tab-btn')[1]);
-    };
+function editUser(id){const u=users.find(x=>x.id===id);if(!u)return;openModal('✏️ Edit User',`<div class="form-group"><label>Email</label><input value="${u.email}" readonly style="background:#f1f5f9"></div><div class="form-group"><label>Full Name</label><input id="editName" value="${u.full_name||u.name||''}"></div><div class="form-group"><label>New Password (leave blank)</label><input id="editPass" type="text" placeholder="Optional"></div><div class="form-group"><label>Role</label><select id="editRole"><option value="admin" ${u.role==='admin'?'selected':''}>👑 Admin</option><option value="manager" ${u.role==='manager'?'selected':''}>👔 Manager</option><option value="staff" ${u.role==='staff'?'selected':''}>👷 Staff</option></select></div><div class="form-group"><label>Login Access</label><select id="editLogin"><option value="1" ${u.can_login!==false?'selected':''}>✅ Allowed</option><option value="0" ${u.can_login===false?'selected':''}>🔒 Blocked</option></select></div><div class="form-group"><label>Account Status</label><select id="editActive"><option value="1" ${u.active!==false?'selected':''}>Active</option><option value="0" ${u.active===false?'selected':''}>Inactive</option></select></div>`);
+    document.getElementById('mSave').onclick=function(){u.full_name=document.getElementById('editName').value.trim();const p=document.getElementById('editPass').value;if(p&&p.length>=6)u.password=p;u.role=document.getElementById('editRole').value;u.can_login=document.getElementById('editLogin').value==='1';u.active=document.getElementById('editActive').value==='1';if(!u.can_login)u.active=false;sb.from('allowed_users').update({full_name:u.full_name,password:u.password,role:u.role,can_login:u.can_login,active:u.active}).eq('id',id).then(()=>{}).catch(()=>{});saveLocal();logActivity('USER_UPDATED',`Updated user: ${u.email}`);closeModal();toast('✅ Updated!');showTab('users',document.querySelectorAll('.tab-btn')[1])}
 }
 
-function editPermissions(id){
-    const u=users.find(x=>x.id===id);if(!u)return;
-    const p=u.permissions||JSON.parse(JSON.stringify(defaultPermissions));
-    openModal(`🔑 Permissions - ${u.full_name||u.email}`,`
-        <div class="form-group"><label>Login Access</label><select id="permLogin"><option value="1" ${u.can_login!==false?'selected':''}>✅ Allowed</option><option value="0" ${u.can_login===false?'selected':''}>🔒 Blocked</option></select></div>
-        <div class="form-group"><label>Role</label><select id="permRole"><option value="admin" ${u.role==='admin'?'selected':''}>👑 Admin</option><option value="manager" ${u.role==='manager'?'selected':''}>👔 Manager</option><option value="staff" ${u.role==='staff'?'selected':''}>👷 Staff</option></select></div>
-        <label style="font-weight:600;display:block;margin-bottom:4px;font-size:.78rem;color:#334155">Permissions</label>
-        <div class="permission-grid">${Object.entries(defaultPermissions).map(([k,v])=>`<div class="perm-item"><label class="toggle-switch"><input type="checkbox" ${(p[k]!==undefined?p[k]:v)?'checked':''} id="perm_${k}"><span class="toggle-slider"></span></label><span style="font-size:.7rem">${k.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())}</span></div>`).join('')}</div>
-    `);
-    document.getElementById('mSave').onclick=function(){
-        u.can_login=document.getElementById('permLogin').value==='1';
-        u.role=document.getElementById('permRole').value;
-        if(!u.can_login)u.active=false;else u.active=true;
-        const np={};
-        Object.keys(defaultPermissions).forEach(k=>{const el=document.getElementById('perm_'+k);np[k]=el?el.checked:false});
-        u.permissions=np;
-        try{
-            sb.from('allowed_users').update({
-                can_login:u.can_login,role:u.role,active:u.active,permissions:np
-            }).eq('id',id).then(()=>{}).catch(()=>{});
-        }catch(e){}
-        saveLocal();
-        closeModal();
-        toast('✅ Permissions updated!');
-        showTab('users',document.querySelectorAll('.tab-btn')[1]);
-    };
+function editPermissions(id){const u=users.find(x=>x.id===id);if(!u)return;const p=u.permissions||JSON.parse(JSON.stringify(defaultPermissions));openModal(`🔑 Permissions - ${u.full_name||u.email}`,`<div class="form-group"><label>Login Access</label><select id="permLogin"><option value="1" ${u.can_login!==false?'selected':''}>✅ Allowed</option><option value="0" ${u.can_login===false?'selected':''}>🔒 Blocked</option></select></div><div class="form-group"><label>Role</label><select id="permRole"><option value="admin" ${u.role==='admin'?'selected':''}>👑 Admin</option><option value="manager" ${u.role==='manager'?'selected':''}>👔 Manager</option><option value="staff" ${u.role==='staff'?'selected':''}>👷 Staff</option></select></div><label style="font-weight:600;display:block;margin-bottom:4px;font-size:.78rem;color:#334155">Permissions</label><div class="permission-grid">${Object.keys(defaultPermissions).map(k=>`<div class="perm-item"><label class="toggle-switch"><input type="checkbox" ${(p[k]!==undefined?p[k]:defaultPermissions[k])?'checked':''} id="perm_${k}"><span class="toggle-slider"></span></label><span style="font-size:.7rem">${k.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())}</span></div>`).join('')}</div>`);
+    document.getElementById('mSave').onclick=function(){u.can_login=document.getElementById('permLogin').value==='1';u.role=document.getElementById('permRole').value;if(!u.can_login)u.active=false;else u.active=true;const np={};Object.keys(defaultPermissions).forEach(k=>{const el=document.getElementById('perm_'+k);np[k]=el?el.checked:false});u.permissions=np;sb.from('allowed_users').update({can_login:u.can_login,role:u.role,active:u.active,permissions:np}).eq('id',id).then(()=>{}).catch(()=>{});saveLocal();logActivity('PERMISSION_CHANGED',`Updated permissions for ${u.email}`);closeModal();toast('✅ Permissions updated!');showTab('users',document.querySelectorAll('.tab-btn')[1])}
 }
 
-function deleteUser(id){
-    const u=users.find(x=>x.id===id);
-    if(!u||!confirm(`Delete ${u.full_name||u.email}?`))return;
-    if(!confirm('This action cannot be undone! Continue?'))return;
-    users=users.filter(x=>x.id!==id);
-    saveLocal();
-    try{sb.from('allowed_users').delete().eq('id',id).then(()=>{}).catch(()=>{})}catch(e){}
-    toast('🗑️ User deleted!');
-    showTab('users',document.querySelectorAll('.tab-btn')[1]);
-}
+function deleteUser(id){const u=users.find(x=>x.id===id);if(!u||!confirm(`Delete ${u.full_name||u.email}?`))return;if(!confirm('This cannot be undone! Continue?'))return;users=users.filter(x=>x.id!==id);saveLocal();sb.from('allowed_users').delete().eq('id',id).then(()=>{}).catch(()=>{});logActivity('USER_DELETED',`Deleted user: ${u.email}`);toast('🗑️ Deleted!');showTab('users',document.querySelectorAll('.tab-btn')[1])}
 
-function exportUsersCSV(){
-    const header='Email,Name,Role,Login,Active,Site,Inventory,Vendor,Biometric';
-    const rows=users.map(u=>{
-        const p=u.permissions||defaultPermissions;
-        return`${u.email},${u.full_name||u.name||''},${u.role||'staff'},${u.can_login!==false?'Yes':'No'},${u.active!==false?'Yes':'No'},${p.canAddSite?'Yes':'No'},${p.canAddInventory?'Yes':'No'},${p.canAddVendor?'Yes':'No'},${u.biometric_enabled?'Yes':'No'}`;
-    });
-    const csv=[header,...rows].join('\n');
-    const blob=new Blob([csv],{type:'text/csv'});
-    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-    a.download=`SUHA_Users_${new Date().toISOString().slice(0,10)}.csv`;a.click();
-    toast('📥 Users exported!');
-}
+function exportUsersCSV(){const h='Email,Name,Role,Login,Active,Site,Inventory,Vendor,Biometric,Last Login';const r=users.map(u=>{const p=u.permissions||defaultPermissions;return`${u.email},${u.full_name||u.name||''},${u.role||'staff'},${u.can_login!==false?'Yes':'No'},${u.active!==false?'Yes':'No'},${p.canAddSite?'Yes':'No'},${p.canAddInventory?'Yes':'No'},${p.canAddVendor?'Yes':'No'},${u.biometric_enabled?'Yes':'No'},${u.last_login||'Never'}`});const csv=[h,...r].join('\n');const b=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`SUHA_Users_${new Date().toISOString().slice(0,10)}.csv`;a.click();toast('📥 Exported!')}
 
-// ===== INITIALIZATION =====
-async function init(){
-    await loadData();
-    showTab('dashboard',document.querySelector('.tab-btn.active'));
-}
-
+async function init(){await loadData();showTab('dashboard',document.querySelector('.tab-btn.active'))}
 document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
